@@ -161,6 +161,7 @@
             this.Controls.Add(this.tbxIP);
             this.Controls.Add(this.btnConnect);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmMain";
