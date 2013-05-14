@@ -8,6 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Sockets;
+//using MinimalisticTelnet;
+using De.Mud.Telnet;
+using Net.Graphite.Telnet;
 
 namespace TStelnet
 {
@@ -18,23 +21,40 @@ namespace TStelnet
             InitializeComponent();
         }
 
-        TcpClient connector = new TcpClient();
+        TelnetWrapper tc = new TelnetWrapper();
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            connectedornot(0);
+        }
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
+            #region get connection details from the textbox
             string ip;
             int port;
             ip = tbxIP.Text.Substring(0, tbxIP.Text.LastIndexOf(":"));
             port = Convert.ToInt32(tbxIP.Text.Substring(tbxIP.Text.LastIndexOf(":") + 1));
             addtolog("Starting to connect to " + ip + " on port " + port + ".");
+            #endregion
+
+            #region connecting trial
             try
             {
                 connectedornot(1);
-                connector.Connect(ip, port);
+                //start telnetconnection
+                tc.Hostname = ip;
+                tc.Port = port;
+                tc.Connect();
+                tc.DataAvailable += new DataAvailableEventHandler(this.tc_DataAvailable);
+                tc.Disconnected += new DisconnectedEventHandler(this.tc_Disconnected);
 
-                if (connector.Connected)
+                //connection established
+                if (tc.Connected)
                 {
+                    tc.Receive();
                     addtolog("Connected");
+                    //tmrRefresh.Start();
                 }
                 else
                 {
@@ -44,30 +64,35 @@ namespace TStelnet
             }
             catch (Exception ex)
             {
-                addtolog(ex.Message);
+                addtolog(ex);
                 connectedornot(0);
             }
+            #endregion
         }
 
         private void btnDisconnect_Click(object sender, EventArgs e)
         {
             try
             {
-                if (connector.Connected)
-                {
-                    connector.Close();
-                    connectedornot(0);
-                }
+             
+                    tc.Disconnect();
+
+                
             }
             catch (Exception ex)
             {
-                addtolog(ex.Message);
+                addtolog(ex);
             }
+
+        }
+
+        private void bgw_DoWork(object sender, DoWorkEventArgs e)
+        {
             
         }
 
 
-        #region Supporting Functions
+        #region supporting functions
 
         private void addtolog(object what)
         {
@@ -79,12 +104,19 @@ namespace TStelnet
 
             const string newline = "\r\n";
 
-            tbxLog.Text += "[" + dtHour + ":" + dtMinute + ":" + dtSecond + "] ";
-            tbxLog.Text += what.ToString() + newline;
-            tbxLog.SelectionStart = tbxLog.Text.Length;
-            tbxLog.ScrollToCaret();
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action<object>(this.addtolog), what);
+            }
+            else
+            {
+                tbxLog.Text += "[" + dtHour + ":" + dtMinute + ":" + dtSecond + "] ";
+                tbxLog.Text += what.ToString() + newline;
+                tbxLog.SelectionStart = tbxLog.Text.Length;
+                tbxLog.ScrollToCaret();
+            }
         }
-        
+
         private string withzero(int number)
         {
             if (number < 10)
@@ -104,16 +136,54 @@ namespace TStelnet
                 tbxIP.Enabled = false;
                 btnConnect.Enabled = false;
                 btnDisconnect.Enabled = true;
+                btnMove.Enabled = true;
+                btnRefresh.Enabled = true;
+                lbxChannels.Enabled = true;
+                lbxClients.Enabled = true;
+                tbxCommands.Enabled = true;
             }
             else
             {
                 tbxIP.Enabled = true;
                 btnConnect.Enabled = true;
                 btnDisconnect.Enabled = false;
+                btnMove.Enabled = false;
+                btnRefresh.Enabled = false;
+                lbxChannels.Enabled = false;
+                lbxClients.Enabled = false;
+                tbxCommands.Enabled = false;
             }
         }
 
         #endregion
+
+        private void tbxCommands_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tbxCommands_KeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (e.KeyCode == Keys.P)
+            {
+                if (tc.Connected)
+                {
+                    tc.Send(tbxCommands.Text);
+                    e.Handled = true;
+                }
+            }
+        }
+        private void tc_DataAvailable(object sender, DataAvailableEventArgs e)
+        {
+            addtolog(e.Data);
+        }
+
+        private void tc_Disconnected(object sender, EventArgs e)
+        {
+            addtolog("Disconnected.");
+            connectedornot(0);
+        }
 
     }
 }
