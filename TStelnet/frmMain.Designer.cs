@@ -31,6 +31,8 @@
             this.btnConnect = new System.Windows.Forms.Button();
             this.tbxIP = new System.Windows.Forms.TextBox();
             this.tbxLog = new System.Windows.Forms.TextBox();
+            this.btnDisconnect = new System.Windows.Forms.Button();
+            this.treeView1 = new System.Windows.Forms.TreeView();
             this.SuspendLayout();
             // 
             // btnConnect
@@ -58,14 +60,35 @@
             this.tbxLog.Name = "tbxLog";
             this.tbxLog.ReadOnly = true;
             this.tbxLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbxLog.Size = new System.Drawing.Size(501, 187);
+            this.tbxLog.Size = new System.Drawing.Size(507, 187);
             this.tbxLog.TabIndex = 3;
+            // 
+            // btnDisconnect
+            // 
+            this.btnDisconnect.Location = new System.Drawing.Point(220, 10);
+            this.btnDisconnect.Name = "btnDisconnect";
+            this.btnDisconnect.Size = new System.Drawing.Size(75, 23);
+            this.btnDisconnect.TabIndex = 4;
+            this.btnDisconnect.Text = "Disconnect";
+            this.btnDisconnect.UseVisualStyleBackColor = true;
+            this.btnDisconnect.Click += new System.EventHandler(this.btnDisconnect_Click);
+            // 
+            // treeView1
+            // 
+            this.treeView1.Location = new System.Drawing.Point(12, 232);
+            this.treeView1.Name = "treeView1";
+            this.treeView1.Size = new System.Drawing.Size(121, 97);
+            this.treeView1.TabIndex = 5;
             // 
             // frmMain
             // 
+            this.AcceptButton = this.btnConnect;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(525, 238);
+            this.CancelButton = this.btnDisconnect;
+            this.ClientSize = new System.Drawing.Size(531, 431);
+            this.Controls.Add(this.treeView1);
+            this.Controls.Add(this.btnDisconnect);
             this.Controls.Add(this.tbxLog);
             this.Controls.Add(this.tbxIP);
             this.Controls.Add(this.btnConnect);
@@ -73,6 +96,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmMain";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TStelnet - by r3t4rdun1c0rns";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -84,6 +108,8 @@
         private System.Windows.Forms.Button btnConnect;
         private System.Windows.Forms.TextBox tbxIP;
         private System.Windows.Forms.TextBox tbxLog;
+        private System.Windows.Forms.Button btnDisconnect;
+        private System.Windows.Forms.TreeView treeView1;
     }
 }
 
