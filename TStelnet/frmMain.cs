@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Sockets;
 //using MinimalisticTelnet;
-using De.Mud.Telnet;
-using Net.Graphite.Telnet;
+//using De.Mud.Telnet;
+//using Net.Graphite.Telnet;
+using TelnetSocketNamespace;
 
 namespace TStelnet
 {
@@ -21,7 +22,7 @@ namespace TStelnet
             InitializeComponent();
         }
 
-        TelnetWrapper tc = new TelnetWrapper();
+        TelnetSocket tc = new TelnetSocket();
 
         private void frmMain_Load(object sender, EventArgs e)
         {
@@ -43,16 +44,12 @@ namespace TStelnet
             {
                 connectedornot(1);
                 //start telnetconnection
-                tc.Hostname = ip;
-                tc.Port = port;
-                tc.Connect();
-                tc.DataAvailable += new DataAvailableEventHandler(this.tc_DataAvailable);
-                tc.Disconnected += new DisconnectedEventHandler(this.tc_Disconnected);
+                tc.OnDataReceived += new ScriptableCommunicatorNamespace.DataReceived(tc_DataReceived);
+                tc.Connect(ip,port);
 
                 //connection established
                 if (tc.Connected)
                 {
-                    tc.Receive();
                     addtolog("Connected");
                     //tmrRefresh.Start();
                 }
@@ -74,10 +71,9 @@ namespace TStelnet
         {
             try
             {
-             
-                    tc.Disconnect();
-
-                
+                  tc.Close();
+                  addtolog("Disconnected.");
+                  connectedornot(0);
             }
             catch (Exception ex)
             {
@@ -86,10 +82,25 @@ namespace TStelnet
 
         }
 
-        private void bgw_DoWork(object sender, DoWorkEventArgs e)
+        private void tbxCommands_KeyDown(object sender, KeyEventArgs e)
         {
-            
+
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (tc.Connected)
+                {
+                    tc.WriteLine(tbxCommands.Text);
+                    addtolog(tbxCommands.Text);
+                    e.Handled = true;
+                }
+            }
         }
+
+        private void tc_DataReceived(string data)
+        {
+            addtolog(data);
+        }
+
 
 
         #region supporting functions
@@ -156,34 +167,5 @@ namespace TStelnet
         }
 
         #endregion
-
-        private void tbxCommands_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tbxCommands_KeyDown(object sender, KeyEventArgs e)
-        {
-
-            if (e.KeyCode == Keys.P)
-            {
-                if (tc.Connected)
-                {
-                    tc.Send(tbxCommands.Text);
-                    e.Handled = true;
-                }
-            }
-        }
-        private void tc_DataAvailable(object sender, DataAvailableEventArgs e)
-        {
-            addtolog(e.Data);
-        }
-
-        private void tc_Disconnected(object sender, EventArgs e)
-        {
-            addtolog("Disconnected.");
-            connectedornot(0);
-        }
-
-    }
+     }
 }
