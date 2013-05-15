@@ -21,7 +21,7 @@ namespace TStelnet
 
         TelnetSocket tc = new TelnetSocket();
         bool connectionestablished = false;
-        bool justreceived = false;
+        string[] lastcommands = new string[10];
 
         private void frmMain_Load(object sender, EventArgs e)
         {
@@ -78,33 +78,42 @@ namespace TStelnet
 
         }
 
-        #region KeyDown-Event to fix
-        /*  
-         * TODO
-         */
-        private void tbxCommands_KeyDown(object sender, KeyEventArgs e)
-        {
-
-            if (e.KeyCode == Keys.Enter)
-            {
-                if (tc.Connected)
-                {
-                    tc.WriteLine(tbxCommands.Text);
-                    addtolog(tbxCommands.Text);
-                    e.Handled = true;
-                }
-            }
-        }
-        #endregion
-
         private void tc_DataReceived(string data)
         {
             if (!connectionestablished) addtolog("Connected.");
             if (data != "") connectionestablished = true;
             addtolog(data);
+        }
+
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
             sendCommand("login " + tbxLogin.Text);
         }
-        
+
+        private void btnHelp_Click(object sender, EventArgs e)
+        {
+            sendCommand("help");
+        }
+
+        private void btnSend_Click(object sender, EventArgs e)
+        {
+            sendCommand(tbxCommands.Text);
+        }
+
+        private void tbxCommands_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == Convert.ToChar(13)) e.Handled = true;
+            if ((e.KeyChar == Convert.ToChar(13)) && (tbxCommands.Text != ""))
+            {
+                if (tc.Connected)
+                {
+                    sendCommand(tbxCommands.Text);
+                    addtolog(tbxCommands.Text);
+                    e.Handled = true;
+                }
+            }
+        }
+
         #region supporting functions
 
         private void addtolog(object what)
@@ -179,8 +188,18 @@ namespace TStelnet
                 try
                 {
                     tc.WriteLine(command);
-                    if (justreceived) justreceived = !justreceived;
                     addtolog(command);
+                    if (command != lastcommands[0])
+                    {
+                        for (int i = 0; i < lastcommands.Length - 1; i++)
+                        {
+                            if (i != lastcommands.Length)
+                            {
+                                lastcommands[i + 1] = lastcommands[i];
+                            }
+                        }
+                        lastcommands[0] = command;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -191,19 +210,5 @@ namespace TStelnet
 
         #endregion
 
-        private void btnLogin_Click(object sender, EventArgs e)
-        {
-            sendCommand("login " + tbxLogin.Text);
-        }
-
-        private void btnHelp_Click(object sender, EventArgs e)
-        {
-            sendCommand("help");
-        }
-
-        private void btnSend_Click(object sender, EventArgs e)
-        {
-            sendCommand(tbxCommands.Text);
-        }
-     }
+    }
 }

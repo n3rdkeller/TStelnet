@@ -103,7 +103,7 @@
             this.tbxCommands.Name = "tbxCommands";
             this.tbxCommands.Size = new System.Drawing.Size(153, 20);
             this.tbxCommands.TabIndex = 6;
-            this.tbxCommands.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbxCommands_KeyDown);
+            this.tbxCommands.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbxCommands_KeyPress);
             // 
             // lbxChannels
             // 
@@ -187,7 +187,6 @@
             // 
             // frmMain
             // 
-            this.AcceptButton = this.btnSend;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnDisconnect;
@@ -206,7 +205,6 @@
             this.Controls.Add(this.tbxIP);
             this.Controls.Add(this.btnConnect);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmMain";
