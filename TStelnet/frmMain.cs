@@ -108,7 +108,6 @@ namespace TStelnet
                 if (tc.Connected)
                 {
                     sendCommand(tbxCommands.Text);
-                    addtolog(tbxCommands.Text);
                     e.Handled = true;
                 }
             }
@@ -189,17 +188,11 @@ namespace TStelnet
                 {
                     tc.WriteLine(command);
                     addtolog(command);
-                    if (command != lastcommands[0])
+                    for (int i = lastcommands.Length; i > 0; i--)
                     {
-                        for (int i = 0; i < lastcommands.Length - 1; i++)
-                        {
-                            if (i != lastcommands.Length)
-                            {
-                                lastcommands[i + 1] = lastcommands[i];
-                            }
-                        }
-                        lastcommands[0] = command;
+                        lastcommands[i] = lastcommands[i - 1];
                     }
+                    lastcommands[0] = command;
                 }
                 catch (Exception ex)
                 {
