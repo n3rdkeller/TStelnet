@@ -8,9 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Sockets;
-//using MinimalisticTelnet;
-//using De.Mud.Telnet;
-//using Net.Graphite.Telnet;
 using TelnetSocketNamespace;
 
 namespace TStelnet
@@ -23,6 +20,8 @@ namespace TStelnet
         }
 
         TelnetSocket tc = new TelnetSocket();
+        bool connectionestablished = false;
+        bool justreceived = false;
 
         private void frmMain_Load(object sender, EventArgs e)
         {
@@ -44,16 +43,13 @@ namespace TStelnet
             {
                 connectedornot(1);
                 //start telnetconnection
+                connectionestablished = false;
+                tc = new TelnetSocket();
                 tc.OnDataReceived += new ScriptableCommunicatorNamespace.DataReceived(tc_DataReceived);
                 tc.Connect(ip,port);
 
-                //connection established
-                if (tc.Connected)
-                {
-                    addtolog("Connected");
-                    //tmrRefresh.Start();
-                }
-                else
+                //connection error
+                if (!tc.Connected)
                 {
                     addtolog("Error trying to connect.");
                     connectedornot(0);
@@ -82,6 +78,10 @@ namespace TStelnet
 
         }
 
+        #region KeyDown-Event to fix
+        /*  
+         * TODO
+         */
         private void tbxCommands_KeyDown(object sender, KeyEventArgs e)
         {
 
@@ -95,14 +95,16 @@ namespace TStelnet
                 }
             }
         }
+        #endregion
 
         private void tc_DataReceived(string data)
         {
+            if (!connectionestablished) addtolog("Connected.");
+            if (data != "") connectionestablished = true;
             addtolog(data);
+            sendCommand("login " + tbxLogin.Text);
         }
-
-
-
+        
         #region supporting functions
 
         private void addtolog(object what)
@@ -152,6 +154,8 @@ namespace TStelnet
                 lbxChannels.Enabled = true;
                 lbxClients.Enabled = true;
                 tbxCommands.Enabled = true;
+                tbxLogin.Enabled = true;
+                btnHelp.Enabled = true;
             }
             else
             {
@@ -163,9 +167,43 @@ namespace TStelnet
                 lbxChannels.Enabled = false;
                 lbxClients.Enabled = false;
                 tbxCommands.Enabled = false;
+                tbxLogin.Enabled = false;
+                btnHelp.Enabled = false;
+            }
+        }
+
+        void sendCommand(string command)
+        {
+            if (tc.Connected)
+            {
+                try
+                {
+                    tc.WriteLine(command);
+                    if (justreceived) justreceived = !justreceived;
+                    addtolog(command);
+                }
+                catch (Exception ex)
+                {
+                    addtolog(ex);                
+                }
             }
         }
 
         #endregion
+
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            sendCommand("login " + tbxLogin.Text);
+        }
+
+        private void btnHelp_Click(object sender, EventArgs e)
+        {
+            sendCommand("help");
+        }
+
+        private void btnSend_Click(object sender, EventArgs e)
+        {
+            sendCommand(tbxCommands.Text);
+        }
      }
 }

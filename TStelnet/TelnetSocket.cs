@@ -262,7 +262,7 @@ namespace TelnetSocketNamespace
             this.socket.NoDelay = true;
 
             this.stream = this.socket.GetStream();
-            this.stream.ReadTimeout = 100;
+            this.stream.ReadTimeout = 1000;
 
             this.reader = new System.Threading.Thread(this.Reader);
             this.reader.Priority = System.Threading.ThreadPriority.BelowNormal;
