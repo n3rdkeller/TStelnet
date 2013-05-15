@@ -67,8 +67,8 @@
             // 
             // tbxLog
             // 
-            this.tbxLog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbxLog.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.tbxLog.BackColor = System.Drawing.Color.White;
             this.tbxLog.Location = new System.Drawing.Point(12, 39);
             this.tbxLog.Multiline = true;
             this.tbxLog.Name = "tbxLog";
@@ -90,6 +90,7 @@
             // 
             // lbxClients
             // 
+            this.lbxClients.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lbxClients.FormattingEnabled = true;
             this.lbxClients.Location = new System.Drawing.Point(13, 232);
             this.lbxClients.Name = "lbxClients";
@@ -99,6 +100,7 @@
             // 
             // tbxCommands
             // 
+            this.tbxCommands.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.tbxCommands.Location = new System.Drawing.Point(268, 232);
             this.tbxCommands.Name = "tbxCommands";
             this.tbxCommands.Size = new System.Drawing.Size(153, 20);
@@ -107,6 +109,7 @@
             // 
             // lbxChannels
             // 
+            this.lbxChannels.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lbxChannels.FormattingEnabled = true;
             this.lbxChannels.Location = new System.Drawing.Point(139, 232);
             this.lbxChannels.Name = "lbxChannels";
@@ -115,6 +118,7 @@
             // 
             // btnMove
             // 
+            this.btnMove.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnMove.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMove.Image = ((System.Drawing.Image)(resources.GetObject("btnMove.Image")));
             this.btnMove.Location = new System.Drawing.Point(268, 351);
@@ -128,6 +132,7 @@
             // 
             // btnRefresh
             // 
+            this.btnRefresh.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnRefresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRefresh.Image = ((System.Drawing.Image)(resources.GetObject("btnRefresh.Image")));
             this.btnRefresh.Location = new System.Drawing.Point(268, 305);
@@ -163,6 +168,7 @@
             // 
             // btnHelp
             // 
+            this.btnHelp.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnHelp.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnHelp.Image = ((System.Drawing.Image)(resources.GetObject("btnHelp.Image")));
             this.btnHelp.Location = new System.Drawing.Point(268, 258);
@@ -177,6 +183,7 @@
             // 
             // btnSend
             // 
+            this.btnSend.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnSend.Location = new System.Drawing.Point(427, 230);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(75, 23);
@@ -190,7 +197,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnDisconnect;
-            this.ClientSize = new System.Drawing.Size(514, 403);
+            this.ClientSize = new System.Drawing.Size(514, 405);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.btnHelp);
             this.Controls.Add(this.btnLogin);
@@ -204,7 +211,7 @@
             this.Controls.Add(this.tbxLog);
             this.Controls.Add(this.tbxIP);
             this.Controls.Add(this.btnConnect);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmMain";

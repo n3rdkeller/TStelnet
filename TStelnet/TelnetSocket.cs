@@ -52,7 +52,7 @@ namespace TelnetSocketNamespace
             Instantiate a TelnetSocket, but do not connect
         </summary>
         */
-        public TelnetSocket ():base(new System.TimeSpan(0, 1, 0),System.Text.Encoding.ASCII ,"\r")
+        public TelnetSocket ():base(new System.TimeSpan(0, 5, 0),System.Text.Encoding.ASCII ,"\r")
         {
             return;
         }

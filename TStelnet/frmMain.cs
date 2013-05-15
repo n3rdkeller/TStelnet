@@ -46,6 +46,7 @@ namespace TStelnet
                 connectionestablished = false;
                 tc = new TelnetSocket();
                 tc.OnDataReceived += new ScriptableCommunicatorNamespace.DataReceived(tc_DataReceived);
+                tc.LineTerminator = "\n\r";
                 tc.Connect(ip,port);
 
                 //connection error
@@ -67,6 +68,7 @@ namespace TStelnet
         {
             try
             {
+                  sendCommand("quit");
                   tc.Close();
                   addtolog("Disconnected.");
                   connectedornot(0);
@@ -82,6 +84,7 @@ namespace TStelnet
         {
             if (!connectionestablished) addtolog("Connected.");
             if (data != "") connectionestablished = true;
+            
             addtolog(data);
         }
 
@@ -97,7 +100,10 @@ namespace TStelnet
 
         private void btnSend_Click(object sender, EventArgs e)
         {
-            if (tbxCommands.Text != "") sendCommand(tbxCommands.Text);
+            if (tbxCommands.Text != "")
+            {
+                sendCommand(tbxCommands.Text);
+            }
         }
 
         private void tbxCommands_KeyPress(object sender, KeyPressEventArgs e)
@@ -132,7 +138,7 @@ namespace TStelnet
             else
             {
                 tbxLog.Text += "[" + dtHour + ":" + dtMinute + ":" + dtSecond + "] ";
-                tbxLog.Text += what.ToString() + newline;
+                tbxLog.Text += what + newline;
                 tbxLog.SelectionStart = tbxLog.Text.Length;
                 tbxLog.ScrollToCaret();
             }

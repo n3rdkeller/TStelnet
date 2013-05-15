@@ -62,7 +62,7 @@ namespace ScriptableCommunicatorNamespace
 
         public virtual void WriteLine(string Format, params object[] Parameters)
         {
-            this.Write(Format + /*this.LineTerminator*/ "\n\r", Parameters);
+            this.Write(Format + this.LineTerminator, Parameters);
             return;
         }
 
