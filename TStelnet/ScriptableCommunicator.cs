@@ -62,7 +62,7 @@ namespace ScriptableCommunicatorNamespace
 
         public virtual void WriteLine(string Format, params object[] Parameters)
         {
-            this.Write(Format + /*this.LineTerminator*/ "/n", Parameters);
+            this.Write(Format + /*this.LineTerminator*/ "\n\r", Parameters);
             return;
         }
 
@@ -77,14 +77,8 @@ namespace ScriptableCommunicatorNamespace
 
             set
             {
-                if (value == null)
-                {
-                    throw (new System.InvalidOperationException
-                        ("The value of Encoding must not be null"));
-                }
-
+                if (value == null) throw (new System.InvalidOperationException("The value of Encoding must not be null"));
                 this.encoding = value;
-
                 return;
             }
         }
@@ -95,7 +89,6 @@ namespace ScriptableCommunicatorNamespace
             {
                 return (this.lineterminator);
             }
-
             set
             {
                 if (value == null)
