@@ -97,7 +97,7 @@ namespace TStelnet
 
         private void btnSend_Click(object sender, EventArgs e)
         {
-            sendCommand(tbxCommands.Text);
+            if (tbxCommands.Text != "") sendCommand(tbxCommands.Text);
         }
 
         private void tbxCommands_KeyPress(object sender, KeyPressEventArgs e)
@@ -188,11 +188,11 @@ namespace TStelnet
                 {
                     tc.WriteLine(command);
                     addtolog(command);
-                    for (int i = lastcommands.Length; i > 0; i--)
-                    {
-                        lastcommands[i] = lastcommands[i - 1];
-                    }
-                    lastcommands[0] = command;
+                    //for (int i = lastcommands.Length; i > 0; i--)
+                    //{
+                    //    lastcommands[i] = lastcommands[i - 1];
+                    //}
+                    //lastcommands[0] = command;
                 }
                 catch (Exception ex)
                 {

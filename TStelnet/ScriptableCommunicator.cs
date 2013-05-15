@@ -21,164 +21,133 @@
 
 namespace ScriptableCommunicatorNamespace
 {
-    public delegate void DataReceived ( string Data ) ;
+    public delegate void DataReceived(string Data);
 
-    public delegate void ExceptionCaught ( System.Exception Exception ) ;
+    public delegate void ExceptionCaught(System.Exception Exception);
 
     public interface IScriptableCommunicator : System.IDisposable
     {
-        void Connect   ( string Host ) ;
-        void WriteLine ( string Data , params object[] Parameters ) ;
-        void Write     ( string Data , params object[] Parameters ) ;
-        void Close     () ;
+        void Connect(string Host);
+        void WriteLine(string Data, params object[] Parameters);
+        void Write(string Data, params object[] Parameters);
+        void Close();
 
-        System.TimeSpan ResponseTimeout { get ; set ; } 
+        System.TimeSpan ResponseTimeout { get; set; }
 
-        System.Text.Encoding Encoding { get ; set ; }
-        
-        string LineTerminator { get ; set ; }
+        System.Text.Encoding Encoding { get; set; }
 
-        event DataReceived    OnDataReceived    ;
-        event ExceptionCaught OnExceptionCaught ;
+        string LineTerminator { get; set; }
+
+        event DataReceived OnDataReceived;
+        event ExceptionCaught OnExceptionCaught;
     }
 
     public abstract class ScriptableCommunicator : IScriptableCommunicator
     {
-        private System.Text.Encoding encoding       ;
-        private string               lineterminator ;
+        private System.Text.Encoding encoding;
+        private string lineterminator;
 
-        protected ScriptableCommunicator
-        (
-            System.TimeSpan      ResponseTimeout
-        ,
-            System.Text.Encoding Encoding
-        ,
-            string               LineTerminator
-        )
+        protected ScriptableCommunicator(System.TimeSpan ResponseTimeout, System.Text.Encoding Encoding, string LineTerminator)
         {
-            this.ResponseTimeout = ResponseTimeout ;
-            this.Encoding        = Encoding ;
-            this.LineTerminator  = LineTerminator ;
-
-            this.Timer           = null ;
-        
-            return ;
-        }
-    
-        public abstract void Connect ( string Host ) ;
-        public abstract void Write   ( string Data , params object[] Parameters ) ;
-        public abstract void Close   () ;
-
-        public virtual void
-        WriteLine
-        (
-            string          Format
-        ,
-            params object[] Parameters
-        )
-        {
-            this.Write ( Format + this.LineTerminator , Parameters ) ;
-
-            return ;
+            this.ResponseTimeout = ResponseTimeout;
+            this.Encoding = Encoding;
+            this.LineTerminator = LineTerminator;
+            this.Timer = null;
+            return;
         }
 
-        public virtual System.TimeSpan ResponseTimeout { get ; set ; }
+        public abstract void Connect(string Host);
+        public abstract void Write(string Data, params object[] Parameters);
+        public abstract void Close();
 
-        public virtual System.Text.Encoding Encoding 
-        { 
-            get 
+        public virtual void WriteLine(string Format, params object[] Parameters)
+        {
+            this.Write(Format + /*this.LineTerminator*/ "/n", Parameters);
+            return;
+        }
+
+        public virtual System.TimeSpan ResponseTimeout { get; set; }
+
+        public virtual System.Text.Encoding Encoding
+        {
+            get
             {
-                return ( this.encoding ) ;
+                return (this.encoding);
             }
-            
-            set 
+
+            set
             {
-                if ( value == null )
+                if (value == null)
                 {
-                    throw ( new System.InvalidOperationException 
-                        ( "The value of Encoding must not be null" ) ) ;
+                    throw (new System.InvalidOperationException
+                        ("The value of Encoding must not be null"));
                 }
-                
-                this.encoding = value ;
-            
-                return ;
+
+                this.encoding = value;
+
+                return;
             }
         }
 
-        public virtual string 
-        LineTerminator 
-        { 
-            get 
+        public virtual string LineTerminator
+        {
+            get
             {
-                return ( this.lineterminator ) ;
+                return (this.lineterminator);
             }
-            
-            set 
+
+            set
             {
-                if ( value == null )
+                if (value == null)
                 {
-                    throw ( new System.InvalidOperationException 
-                        ( "The value of LineTerminator must not be null" ) ) ;
+                    throw (new System.InvalidOperationException
+                        ("The value of LineTerminator must not be null"));
                 }
-                
-                this.lineterminator = value ;
-                
-                return ;
+
+                this.lineterminator = value;
+
+                return;
             }
         }
 
-        protected virtual System.Timers.Timer Timer { get ; set ; } 
-    
-        public event DataReceived OnDataReceived ;
+        protected virtual System.Timers.Timer Timer { get; set; }
 
-        protected virtual void
-        RaiseDataReceived
-        (
-            string Data
-        )
+        public event DataReceived OnDataReceived;
+
+        protected virtual void RaiseDataReceived(string Data)
         {
-            if ( this.Timer != null )
+            if (this.Timer != null)
             {
-                this.Timer.Stop() ;
+                this.Timer.Stop();
             }
-            
-            if ( this.OnDataReceived != null )
+
+            if (this.OnDataReceived != null)
             {
-                this.OnDataReceived ( Data ) ;
+                this.OnDataReceived(Data);
             }
-            
-            if ( this.Timer != null )
+
+            if (this.Timer != null)
             {
-                this.Timer.Start() ;
+                this.Timer.Start();
             }
-            
-            return ;
+            return;
         }
 
-        public event ExceptionCaught OnExceptionCaught ;
+        public event ExceptionCaught OnExceptionCaught;
 
-        protected virtual void
-        RaiseExceptionCaught
-        (
-            System.Exception Exception
-        )
+        protected virtual void RaiseExceptionCaught(System.Exception Exception)
         {
-            if ( OnExceptionCaught != null )
+            if (OnExceptionCaught != null)
             {
-                OnExceptionCaught ( Exception ) ;
+                OnExceptionCaught(Exception);
             }
-            
-            return ;
+            return;
         }
 
-        public virtual void
-        Dispose
-        (
-        )
+        public virtual void Dispose()
         {
-            this.Close() ;
-            
-            return ;
+            this.Close();
+            return;
         }
     }
 }

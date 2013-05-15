@@ -52,18 +52,7 @@ namespace TelnetSocketNamespace
             Instantiate a TelnetSocket, but do not connect
         </summary>
         */
-        public TelnetSocket
-        (
-        )
-            :
-            base
-            (
-                new System.TimeSpan(0, 1, 0)
-            ,
-                System.Text.Encoding.ASCII
-            ,
-                "\r"
-            )
+        public TelnetSocket ():base(new System.TimeSpan(0, 1, 0),System.Text.Encoding.ASCII ,"\r")
         {
             return;
         }
@@ -89,11 +78,7 @@ namespace TelnetSocketNamespace
             If the Host value appears to contain a port number, but it can't be parsed successfully
         </exception>
         */
-        public override void
-        Connect
-        (
-            string Host
-        )
+        public override void Connect(string Host)
         {
             if (Host == null)
             {
@@ -127,21 +112,13 @@ namespace TelnetSocketNamespace
             If the Host value is null
         </exception>
         */
-        public void
-        Connect
-        (
-            string Host
-        ,
-            int Port
-        )
+        public void Connect(string Host,int Port)
         {
             if (Host == null)
             {
                 throw (new System.ArgumentNullException("Host", "Host must not be null"));
             }
-
             this.DoConnect(Host, Port);
-
             return;
         }
 
@@ -162,13 +139,7 @@ namespace TelnetSocketNamespace
             If the connection isn't open
         </exception>
         */
-        public override void
-        Write
-        (
-            string Format
-        ,
-            params object[] Parameters
-        )
+        public override void Write(string Format,params object[] Parameters)
         {
             if ((this.socket == null) || !this.socket.Connected)
             {
@@ -179,12 +150,7 @@ namespace TelnetSocketNamespace
             {
                 if ((Parameters != null) && (Parameters.Length > 0))
                 {
-                    Format = System.String.Format
-                    (
-                        Format
-                    ,
-                        Parameters
-                    );
+                    Format = System.String.Format(Format,Parameters);
                 }
 
                 byte[] data = this.Encoding.GetBytes(Format);
@@ -197,7 +163,6 @@ namespace TelnetSocketNamespace
             catch (System.Exception err)
             {
                 this.RaiseExceptionCaught(err);
-
                 throw;
             }
 
@@ -217,10 +182,7 @@ namespace TelnetSocketNamespace
             Stop reading from the socket, and disconnect from the host
         </summary>
         */
-        public override void
-        Close
-        (
-        )
+        public override void Close()
         {
             this.Abort();
 
@@ -245,13 +207,7 @@ namespace TelnetSocketNamespace
 
         # region Private methods
 
-        private void
-        DoConnect
-        (
-            string Host
-        ,
-            int Port
-        )
+        private void DoConnect (string Host , int Port)
         {
             if (this.socket != null)
             {
@@ -271,66 +227,40 @@ namespace TelnetSocketNamespace
 
             if (this.ResponseTimeout.TotalMilliseconds > 0)
             {
-                this.Timer = new System.Timers.Timer
-                    (this.ResponseTimeout.TotalMilliseconds);
-
-                this.Timer.Elapsed += delegate
-                (
-                    object sender
-                ,
-                    System.Timers.ElapsedEventArgs args
-                )
+                this.Timer = new System.Timers.Timer(this.ResponseTimeout.TotalMilliseconds);
+                this.Timer.Elapsed += delegate(object sender, System.Timers.ElapsedEventArgs args)
                 {
                     this.Abort();
-
-                    throw (new System.TimeoutException
-                        ("The ResponseTimeout has expired"));
+                    throw (new System.TimeoutException("The ResponseTimeout has expired"));
                 };
-
                 this.Timer.Start();
             }
-
             return;
         }
 
-        private void
-        Abort
-        (
-        )
+        private void Abort ()
         {
             this.abort = true;
-
             if (this.Timer != null)
             {
                 this.Timer.Stop();
             }
-
             if (this.reader != null)
             {
                 if (!this.reader.Join(15000))
                 {
                     this.reader.Abort();
-
                     this.reader.Join(15000);
                 }
-
                 this.reader = null;
             }
 
             return;
         }
 
-        private void
-        Reader
-        (
-        )
+        private void Reader ()
         {
-            using
-            (
-                Negotiator neg
-            =
-                new Negotiator(this.stream)
-            )
+            using(Negotiator neg=new Negotiator(this.stream))
             {
                 byte[] buffer = new byte[this.socket.ReceiveBufferSize];
 
@@ -357,7 +287,7 @@ namespace TelnetSocketNamespace
                     }
                     else
                     {
-                        System.Threading.Thread.Sleep(100);
+                        System.Threading.Thread.Sleep(10);
                     }
                 }
             }
@@ -373,20 +303,13 @@ namespace TelnetSocketNamespace
         {
             private System.Net.Sockets.NetworkStream stream;
 
-            public Negotiator
-            (
-                System.Net.Sockets.NetworkStream Stream
-            )
+            public Negotiator(System.Net.Sockets.NetworkStream Stream)
             {
                 this.stream = Stream;
-
                 return;
             }
 
-            public void
-            Dispose
-            (
-            )
+            public void Dispose ()
             {
                 if (this.stream != null)
                 {
@@ -396,13 +319,7 @@ namespace TelnetSocketNamespace
                 return;
             }
 
-            public int
-            Negotiate
-            (
-                byte[] Buffer
-            ,
-                int Count
-            )
+            public int Negotiate(byte[] Buffer,int Count)
             {
                 int resplen = 0;
                 int index = 0;
