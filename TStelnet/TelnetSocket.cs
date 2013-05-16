@@ -232,7 +232,7 @@ namespace TelnetSocketNamespace
                 {
                     this.Abort();
                     throw (new System.TimeoutException("The ResponseTimeout has expired"));
-                };
+                }; 
                 this.Timer.Start();
             }
             return;

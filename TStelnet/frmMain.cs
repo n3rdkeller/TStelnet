@@ -22,6 +22,14 @@ namespace TStelnet
         TelnetSocket tc = new TelnetSocket();
         bool connectionestablished = false;
         string[] lastcommands = new string[10];
+        string lastcommand = string.Empty;
+        int lastcommandscounter = -1;
+        string composedstring = string.Empty;
+        string tsnewline = "\n\r";
+        string tbxnewline = "\r\n";
+        string chlist = string.Empty;
+        string cllist = string.Empty;
+
 
         private void frmMain_Load(object sender, EventArgs e)
         {
@@ -46,8 +54,8 @@ namespace TStelnet
                 connectionestablished = false;
                 tc = new TelnetSocket();
                 tc.OnDataReceived += new ScriptableCommunicatorNamespace.DataReceived(tc_DataReceived);
-                tc.LineTerminator = "\n\r";
-                tc.Connect(ip,port);
+                tc.LineTerminator = tsnewline;
+                tc.Connect(ip, port);
 
                 //connection error
                 if (!tc.Connected)
@@ -68,10 +76,10 @@ namespace TStelnet
         {
             try
             {
-                  sendCommand("quit");
-                  tc.Close();
-                  addtolog("Disconnected.");
-                  connectedornot(0);
+                sendCommand("quit");
+                tc.Close();
+                addtolog("Disconnected.");
+                connectedornot(0);
             }
             catch (Exception ex)
             {
@@ -83,9 +91,53 @@ namespace TStelnet
         private void tc_DataReceived(string data)
         {
             if (!connectionestablished) addtolog("Connected.");
-            if (data != "") connectionestablished = true;
-            
-            addtolog(data);
+            if (data != string.Empty) connectionestablished = true;
+
+            /* teamspeak does something strange at this point
+             * it splits data in the middle of nowhere, so we 
+             * need to compose it again before adding it to log.
+             */
+            if (!data.EndsWith(tsnewline))
+            {
+                composedstring = composedstring + data;
+            }
+            else
+            {
+                data = composedstring + data;
+                composedstring = string.Empty;
+                
+                //manual carriage returns for lists to be displayed in a niiiiiice way
+                if (lastcommand == "clientlist" || lastcommand == "channellist")
+                {
+                    data = data.Replace("|", tsnewline);
+                    if (lastcommand == "clientlist") cllist = data;
+                    if (lastcommand == "channellist") chlist = data;
+                }
+                // useless as fuck: (aber schön)
+                //switch (lastcommand)
+                //{
+                //    case "clientlist":
+                //        cllist = data;
+                //        goto case "nocodedopplung";
+                //    case "channellist":
+                //        chlist = data;
+                //        goto case "nocodedopplung";
+                //    case "nocodedopplung":
+                //        data = data.Replace("|", tsnewline);
+                //        break;
+                //    default:
+                //        break;
+                //}
+
+                /*Here we split data into strings if there is a carriage return*/
+                string[] decomposeddata = new string[32767];
+                decomposeddata = data.Split(new string[] { tsnewline }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string dataline in decomposeddata)
+                {
+                    addtolog(dataline);
+                }
+
+            }
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -103,6 +155,7 @@ namespace TStelnet
             if (tbxCommands.Text != "")
             {
                 sendCommand(tbxCommands.Text);
+                tbxCommands.Text = "";
             }
         }
 
@@ -114,9 +167,61 @@ namespace TStelnet
                 if (tc.Connected)
                 {
                     sendCommand(tbxCommands.Text);
+                    tbxCommands.Text = "";
                     e.Handled = true;
                 }
             }
+
+        }
+
+        private void tbxCommands_KeyDown(object sender, KeyEventArgs e)
+        {
+
+
+            if (e.KeyCode == Keys.Up)
+            {
+                int bugfixvariable;
+                if (lastcommandscounter == -1)
+                {
+                    bugfixvariable = 0;
+                }
+                else
+                {
+                    bugfixvariable = lastcommandscounter;
+                }
+                if (lastcommands[bugfixvariable] != null)
+                {
+                    if (lastcommandscounter == ArrayLength(lastcommands) - 1)
+                    {
+                        lastcommandscounter = 0;
+                    }
+                    else
+                    {
+                        lastcommandscounter++;
+                    }
+                    tbxCommands.Text = lastcommands[lastcommandscounter];
+                }
+            }
+            else if (e.KeyCode == Keys.Down)
+            {
+                if (lastcommandscounter == -1 || lastcommandscounter == 0)
+                {
+                    lastcommandscounter = ArrayLength(lastcommands) - 1;
+                    tbxCommands.Text = lastcommands[lastcommandscounter];
+                }
+                else
+                {
+                    lastcommandscounter--;
+                    tbxCommands.Text = lastcommands[lastcommandscounter];
+                }
+            }
+
+            e.Handled = true;
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            
         }
 
         #region supporting functions
@@ -129,7 +234,6 @@ namespace TStelnet
             dtMinute = withzero(currentDate.Minute);
             dtSecond = withzero(currentDate.Second);
 
-            const string newline = "\r\n";
 
             if (this.InvokeRequired)
             {
@@ -138,7 +242,7 @@ namespace TStelnet
             else
             {
                 tbxLog.Text += "[" + dtHour + ":" + dtMinute + ":" + dtSecond + "] ";
-                tbxLog.Text += what + newline;
+                tbxLog.Text += what + tbxnewline;
                 tbxLog.SelectionStart = tbxLog.Text.Length;
                 tbxLog.ScrollToCaret();
             }
@@ -170,6 +274,8 @@ namespace TStelnet
                 tbxCommands.Enabled = true;
                 tbxLogin.Enabled = true;
                 btnHelp.Enabled = true;
+                btnLogin.Enabled = true;
+                btnSend.Enabled = true;
             }
             else
             {
@@ -183,6 +289,8 @@ namespace TStelnet
                 tbxCommands.Enabled = false;
                 tbxLogin.Enabled = false;
                 btnHelp.Enabled = false;
+                btnLogin.Enabled = false;
+                btnSend.Enabled = false;
             }
         }
 
@@ -194,17 +302,35 @@ namespace TStelnet
                 {
                     tc.WriteLine(command);
                     addtolog(command);
-                    //for (int i = lastcommands.Length; i > 0; i--)
-                    //{
-                    //    lastcommands[i] = lastcommands[i - 1];
-                    //}
-                    //lastcommands[0] = command;
+                    if (lastcommands[0] != command)
+                    {
+                        for (int i = lastcommands.Length - 1; i > 0; i--)
+                        {
+                            lastcommands[i] = lastcommands[i - 1];
+                        }
+                        lastcommands[0] = command;
+                        lastcommand = command;
+                    }
+                    lastcommandscounter = -1;
                 }
                 catch (Exception ex)
                 {
-                    addtolog(ex);                
+                    addtolog(ex);
                 }
             }
+        }
+
+        public int ArrayLength(object[] anarray)
+        {
+            int count = 0;
+            for (int i = 0; i < anarray.Length; i++)
+            {
+                if (anarray[i] != null)
+                {
+                    count++;
+                }
+            }
+            return count;
         }
 
         #endregion
