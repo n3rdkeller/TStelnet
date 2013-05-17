@@ -27,9 +27,8 @@ namespace TStelnet
         string composedstring = string.Empty;
         string tsnewline = "\n\r";
         string tbxnewline = "\r\n";
-        string chlist = string.Empty;
-        string cllist = string.Empty;
-
+        string[] chlist = new string[32767];
+        string[] cllist = new string[32767];
 
         private void frmMain_Load(object sender, EventArgs e)
         {
@@ -110,8 +109,6 @@ namespace TStelnet
                 if (lastcommand == "clientlist" || lastcommand == "channellist")
                 {
                     data = data.Replace("|", tsnewline);
-                    if (lastcommand == "clientlist") cllist = data;
-                    if (lastcommand == "channellist") chlist = data;
                 }
                 // useless as fuck: (aber schön)
                 //switch (lastcommand)
@@ -136,7 +133,11 @@ namespace TStelnet
                 {
                     addtolog(dataline);
                 }
-
+                if (lastcommand == "clientlist" && data != "error id=0 msg=ok\n\r")
+                {
+                    cllist = decomposeddata;
+                }
+                if (lastcommand == "channellist") chlist = decomposeddata;
             }
         }
 
@@ -221,8 +222,41 @@ namespace TStelnet
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            
+            sendCommand("clientlist");
+            System.Threading.Thread.Sleep(1000);
+            //tc.WriteLine("clientlist");
+            //lastcommand = "clientlist";
+            lbxClients.Items.Clear();
+            string[] names = getClients(cllist);
+            for (int i = 0; i < names.Length; i++)
+            {
+                lbxClients.Items.Add(names[i]);
+            }
         }
+
+        private string[]getClients(string[] rawlist)
+        {
+            for (int i = 0; i < rawlist.Length; i++)
+            {
+                //rawlist[i] = rawlist[i].Substring(rawlist[i].LastIndexOf("client_nickname=") + ("client_nickname=").Length,
+                      //rawlist[i].Length - rawlist[i].LastIndexOf("client_type=")-1);
+                rawlist[i] = rawlist[i].Substring(rawlist[i].IndexOf("client_nickname=") + ("client_nickname=").Length,
+                    (rawlist[i].LastIndexOf("client_type=") -1) - (rawlist[i].IndexOf("client_nickname=") + ("client_nickname=").Length));
+            }
+            return rawlist;
+        }
+        
+        private int[] getClientIDs(string[] rawlist)
+        {
+            int[] ids = new int[rawlist.Length];
+            for (int i = 0; i < rawlist.Length - 1; i++)
+            {
+                ids[i] = Convert.ToInt32( rawlist[i].Substring(rawlist[i].LastIndexOf("clid="),
+                      rawlist[i].Length - rawlist[i].LastIndexOf("cid=")-1));
+            }
+            return ids;
+        }
+
 
         #region supporting functions
 
@@ -300,7 +334,7 @@ namespace TStelnet
             {
                 try
                 {
-                    tc.WriteLine(command);
+                    
                     addtolog(command);
                     if (lastcommands[0] != command)
                     {
@@ -312,7 +346,8 @@ namespace TStelnet
                         lastcommand = command;
                     }
                     lastcommandscounter = -1;
-                }
+                    tc.WriteLine(command);
+                } 
                 catch (Exception ex)
                 {
                     addtolog(ex);

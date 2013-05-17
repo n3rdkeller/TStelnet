@@ -249,7 +249,8 @@
             this.CancelButton = this.btnDisconnect;
             this.ClientSize = new System.Drawing.Size(847, 662);
             this.Controls.Add(this.tclMain);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmMain";
