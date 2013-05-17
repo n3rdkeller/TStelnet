@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Knoten1");
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Knoten2");
@@ -45,16 +44,12 @@
             treeNode6,
             treeNode7});
             this.btnConnect = new System.Windows.Forms.Button();
-            this.tbxIP = new System.Windows.Forms.TextBox();
             this.tbxLog = new System.Windows.Forms.TextBox();
             this.btnDisconnect = new System.Windows.Forms.Button();
             this.lbxClients = new System.Windows.Forms.ListBox();
             this.tbxCommands = new System.Windows.Forms.TextBox();
             this.btnMove = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
-            this.bgw = new System.ComponentModel.BackgroundWorker();
-            this.tmrRefresh = new System.Windows.Forms.Timer(this.components);
-            this.tbxLogin = new System.Windows.Forms.TextBox();
             this.btnLogin = new System.Windows.Forms.Button();
             this.btnHelp = new System.Windows.Forms.Button();
             this.btnSend = new System.Windows.Forms.Button();
@@ -62,9 +57,14 @@
             this.tbpConsole = new System.Windows.Forms.TabPage();
             this.tbpLists = new System.Windows.Forms.TabPage();
             this.tvwChannels = new System.Windows.Forms.TreeView();
+            this.nudSID = new System.Windows.Forms.NumericUpDown();
+            this.tbxNick = new System.Windows.Forms.TextBox();
+            this.tbxLogin = new System.Windows.Forms.TextBox();
+            this.tbxIP = new System.Windows.Forms.TextBox();
             this.tclMain.SuspendLayout();
             this.tbpConsole.SuspendLayout();
             this.tbpLists.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSID)).BeginInit();
             this.SuspendLayout();
             // 
             // btnConnect
@@ -76,14 +76,6 @@
             this.btnConnect.Text = "Connect";
             this.btnConnect.UseVisualStyleBackColor = true;
             this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
-            // 
-            // tbxIP
-            // 
-            this.tbxIP.Location = new System.Drawing.Point(8, 6);
-            this.tbxIP.Name = "tbxIP";
-            this.tbxIP.Size = new System.Drawing.Size(121, 20);
-            this.tbxIP.TabIndex = 1;
-            this.tbxIP.Text = "91.121.193.155:10011";
             // 
             // tbxLog
             // 
@@ -288,21 +280,9 @@
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
-            // tmrRefresh
-            // 
-            this.tmrRefresh.Interval = 500;
-            // 
-            // tbxLogin
-            // 
-            this.tbxLogin.Location = new System.Drawing.Point(297, 6);
-            this.tbxLogin.Name = "tbxLogin";
-            this.tbxLogin.Size = new System.Drawing.Size(120, 20);
-            this.tbxLogin.TabIndex = 10;
-            this.tbxLogin.Text = "admin E9LE6NVv";
-            // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(423, 4);
+            this.btnLogin.Location = new System.Drawing.Point(589, 4);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(75, 23);
             this.btnLogin.TabIndex = 11;
@@ -351,6 +331,8 @@
             // 
             // tbpConsole
             // 
+            this.tbpConsole.Controls.Add(this.nudSID);
+            this.tbpConsole.Controls.Add(this.tbxNick);
             this.tbpConsole.Controls.Add(this.btnHelp);
             this.tbpConsole.Controls.Add(this.btnLogin);
             this.tbpConsole.Controls.Add(this.btnSend);
@@ -408,6 +390,42 @@
             this.tvwChannels.Size = new System.Drawing.Size(345, 636);
             this.tvwChannels.TabIndex = 10;
             // 
+            // nudSID
+            // 
+            this.nudSID.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::TStelnet.Properties.Settings.Default, "sid", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.nudSID.Location = new System.Drawing.Point(540, 7);
+            this.nudSID.Name = "nudSID";
+            this.nudSID.Size = new System.Drawing.Size(43, 20);
+            this.nudSID.TabIndex = 15;
+            this.nudSID.Value = global::TStelnet.Properties.Settings.Default.sid;
+            // 
+            // tbxNick
+            // 
+            this.tbxNick.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::TStelnet.Properties.Settings.Default, "nickname", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.tbxNick.Location = new System.Drawing.Point(424, 6);
+            this.tbxNick.Name = "tbxNick";
+            this.tbxNick.Size = new System.Drawing.Size(110, 20);
+            this.tbxNick.TabIndex = 14;
+            this.tbxNick.Text = global::TStelnet.Properties.Settings.Default.nickname;
+            // 
+            // tbxLogin
+            // 
+            this.tbxLogin.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::TStelnet.Properties.Settings.Default, "login", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.tbxLogin.Location = new System.Drawing.Point(297, 6);
+            this.tbxLogin.Name = "tbxLogin";
+            this.tbxLogin.Size = new System.Drawing.Size(120, 20);
+            this.tbxLogin.TabIndex = 10;
+            this.tbxLogin.Text = global::TStelnet.Properties.Settings.Default.login;
+            // 
+            // tbxIP
+            // 
+            this.tbxIP.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::TStelnet.Properties.Settings.Default, "adress", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.tbxIP.Location = new System.Drawing.Point(8, 6);
+            this.tbxIP.Name = "tbxIP";
+            this.tbxIP.Size = new System.Drawing.Size(121, 20);
+            this.tbxIP.TabIndex = 1;
+            this.tbxIP.Text = global::TStelnet.Properties.Settings.Default.adress;
+            // 
             // frmMain
             // 
             this.AcceptButton = this.btnSend;
@@ -427,6 +445,7 @@
             this.tbpConsole.ResumeLayout(false);
             this.tbpConsole.PerformLayout();
             this.tbpLists.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.nudSID)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -441,8 +460,6 @@
         private System.Windows.Forms.TextBox tbxCommands;
         private System.Windows.Forms.Button btnMove;
         private System.Windows.Forms.Button btnRefresh;
-        private System.ComponentModel.BackgroundWorker bgw;
-        private System.Windows.Forms.Timer tmrRefresh;
         private System.Windows.Forms.TextBox tbxLogin;
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.Button btnHelp;
@@ -451,6 +468,8 @@
         private System.Windows.Forms.TabPage tbpLists;
         private System.Windows.Forms.TabPage tbpConsole;
         private System.Windows.Forms.TreeView tvwChannels;
+        private System.Windows.Forms.TextBox tbxNick;
+        private System.Windows.Forms.NumericUpDown nudSID;
     }
 }
 

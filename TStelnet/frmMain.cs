@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Net.Sockets;
 using TelnetSocketNamespace;
+using System.Threading;
 
 namespace TStelnet
 {
@@ -19,20 +12,27 @@ namespace TStelnet
             InitializeComponent();
         }
 
+        #region variables declaration
         TelnetSocket tc = new TelnetSocket();
         bool connectionestablished = false;
         string[] lastcommands = new string[10];
         string lastcommand = string.Empty;
         int lastcommandscounter = -1;
         string composedstring = string.Empty;
-        string tsnewline = "\n\r";
-        string tbxnewline = "\r\n";
+        const string tsnewline = "\n\r";
+        const string tbxnewline = "\r\n";
+        const string space = "\\s";
         string[] chlist = new string[32767];
         string[] cllist = new string[32767];
+        int[] chidlist = new int[32767];
+        int[] chpidlist = new int[32767]; //ERKENNTNIS: PID STEHT FÜR PARENT-ID! HA!
+        int[] clidlist = new int[32767];
+        #endregion
 
         private void frmMain_Load(object sender, EventArgs e)
         {
             connectedornot(0);
+            tvwChannels.ExpandAll();
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -107,25 +107,9 @@ namespace TStelnet
                 
                 //manual carriage returns for lists to be displayed in a niiiiiice way
                 if (lastcommand == "clientlist" || lastcommand == "channellist") data = data.Replace("|", tsnewline);                
-                data = data.Replace ("\\s", " ");
+                data = data.Replace (space, " ");
                 data = data.Replace("???", "™");
-
-                // useless as fuck: (aber schön)
-                //switch (lastcommand)
-                //{
-                //    case "clientlist":
-                //        cllist = data;
-                //        goto case "nocodedopplung";
-                //    case "channellist":
-                //        chlist = data;
-                //        goto case "nocodedopplung";
-                //    case "nocodedopplung":
-                //        data = data.Replace("|", tsnewline);
-                //        break;
-                //    default:
-                //        break;
-                //}
-
+                
                 /*Here we split data into strings if there is a carriage return*/
                 string[] decomposeddata = new string[32767];
                 decomposeddata = data.Split(new string[] { tsnewline }, StringSplitOptions.RemoveEmptyEntries);
@@ -138,6 +122,8 @@ namespace TStelnet
         private void btnLogin_Click(object sender, EventArgs e)
         {
             sendCommand("login " + tbxLogin.Text);
+            if (nudSID.Value != 0) sendCommand("use sid=" + Convert.ToString(nudSID.Value));
+            if (tbxNick.Text != "") sendCommand("clientupdate client_nickname=" + tbxNick.Text.Replace(" ", space));
         }
 
         private void btnHelp_Click(object sender, EventArgs e)
@@ -244,8 +230,6 @@ namespace TStelnet
             return ids;
         }
 
-    
-
         private void addtolog(object what)
         {
             DateTime currentDate = DateTime.Now;
@@ -293,6 +277,8 @@ namespace TStelnet
                 btnHelp.Enabled = true;
                 btnLogin.Enabled = true;
                 btnSend.Enabled = true;
+                tbxNick.Enabled = true;
+                nudSID.Enabled = true;
             }
             else
             {
@@ -308,6 +294,8 @@ namespace TStelnet
                 btnHelp.Enabled = false;
                 btnLogin.Enabled = false;
                 btnSend.Enabled = false;
+                tbxNick.Enabled = false;
+                nudSID.Enabled = false;
             }
         }
 
