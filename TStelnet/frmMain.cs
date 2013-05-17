@@ -222,10 +222,13 @@ namespace TStelnet
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
+
             sendCommand("clientlist");
-            System.Threading.Thread.Sleep(1000);
-            //tc.WriteLine("clientlist");
-            //lastcommand = "clientlist";
+            //System.Threading.Thread.Sleep(2000);
+            if (cllist[0] == null)
+            {
+                return;
+            }
             lbxClients.Items.Clear();
             string[] names = getClients(cllist);
             for (int i = 0; i < names.Length; i++)
@@ -238,8 +241,6 @@ namespace TStelnet
         {
             for (int i = 0; i < rawlist.Length; i++)
             {
-                //rawlist[i] = rawlist[i].Substring(rawlist[i].LastIndexOf("client_nickname=") + ("client_nickname=").Length,
-                      //rawlist[i].Length - rawlist[i].LastIndexOf("client_type=")-1);
                 rawlist[i] = rawlist[i].Substring(rawlist[i].IndexOf("client_nickname=") + ("client_nickname=").Length,
                     (rawlist[i].LastIndexOf("client_type=") -1) - (rawlist[i].IndexOf("client_nickname=") + ("client_nickname=").Length));
             }
@@ -249,10 +250,10 @@ namespace TStelnet
         private int[] getClientIDs(string[] rawlist)
         {
             int[] ids = new int[rawlist.Length];
-            for (int i = 0; i < rawlist.Length - 1; i++)
+            for (int i = 0; i < rawlist.Length; i++)
             {
-                ids[i] = Convert.ToInt32( rawlist[i].Substring(rawlist[i].LastIndexOf("clid="),
-                      rawlist[i].Length - rawlist[i].LastIndexOf("cid=")-1));
+                ids[i] = Convert.ToInt32( "0"/*rawlist[i].Substring(rawlist[i].LastIndexOf("clid="),
+                      rawlist[i].Length - rawlist[i].LastIndexOf("cid=")-1)*/);
             }
             return ids;
         }
