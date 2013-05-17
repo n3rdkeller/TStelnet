@@ -30,13 +30,26 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Knoten1");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Knoten2");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Knoten3");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Knoten0", new System.Windows.Forms.TreeNode[] {
+            treeNode1,
+            treeNode2,
+            treeNode3});
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Knoten5");
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Knoten6");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Knoten7");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Knoten4", new System.Windows.Forms.TreeNode[] {
+            treeNode5,
+            treeNode6,
+            treeNode7});
             this.btnConnect = new System.Windows.Forms.Button();
             this.tbxIP = new System.Windows.Forms.TextBox();
             this.tbxLog = new System.Windows.Forms.TextBox();
             this.btnDisconnect = new System.Windows.Forms.Button();
             this.lbxClients = new System.Windows.Forms.ListBox();
             this.tbxCommands = new System.Windows.Forms.TextBox();
-            this.lbxChannels = new System.Windows.Forms.ListBox();
             this.btnMove = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.bgw = new System.ComponentModel.BackgroundWorker();
@@ -48,6 +61,7 @@
             this.tclMain = new System.Windows.Forms.TabControl();
             this.tbpConsole = new System.Windows.Forms.TabPage();
             this.tbpLists = new System.Windows.Forms.TabPage();
+            this.tvwChannels = new System.Windows.Forms.TreeView();
             this.tclMain.SuspendLayout();
             this.tbpConsole.SuspendLayout();
             this.tbpLists.SuspendLayout();
@@ -247,14 +261,6 @@
             this.tbxCommands.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbxCommands_KeyDown);
             this.tbxCommands.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbxCommands_KeyPress);
             // 
-            // lbxChannels
-            // 
-            this.lbxChannels.FormattingEnabled = true;
-            this.lbxChannels.Location = new System.Drawing.Point(3, 3);
-            this.lbxChannels.Name = "lbxChannels";
-            this.lbxChannels.Size = new System.Drawing.Size(342, 628);
-            this.lbxChannels.TabIndex = 7;
-            // 
             // btnMove
             // 
             this.btnMove.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -364,8 +370,8 @@
             // 
             // tbpLists
             // 
+            this.tbpLists.Controls.Add(this.tvwChannels);
             this.tbpLists.Controls.Add(this.lbxClients);
-            this.tbpLists.Controls.Add(this.lbxChannels);
             this.tbpLists.Controls.Add(this.btnRefresh);
             this.tbpLists.Controls.Add(this.btnMove);
             this.tbpLists.Location = new System.Drawing.Point(4, 22);
@@ -375,6 +381,32 @@
             this.tbpLists.TabIndex = 1;
             this.tbpLists.Text = "Lists";
             this.tbpLists.UseVisualStyleBackColor = true;
+            // 
+            // tvwChannels
+            // 
+            this.tvwChannels.Location = new System.Drawing.Point(0, 0);
+            this.tvwChannels.Name = "tvwChannels";
+            treeNode1.Name = "Knoten1";
+            treeNode1.Text = "Knoten1";
+            treeNode2.Name = "Knoten2";
+            treeNode2.Text = "Knoten2";
+            treeNode3.Name = "Knoten3";
+            treeNode3.Text = "Knoten3";
+            treeNode4.Name = "Knoten0";
+            treeNode4.Text = "Knoten0";
+            treeNode5.Name = "Knoten5";
+            treeNode5.Text = "Knoten5";
+            treeNode6.Name = "Knoten6";
+            treeNode6.Text = "Knoten6";
+            treeNode7.Name = "Knoten7";
+            treeNode7.Text = "Knoten7";
+            treeNode8.Name = "Knoten4";
+            treeNode8.Text = "Knoten4";
+            this.tvwChannels.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode4,
+            treeNode8});
+            this.tvwChannels.Size = new System.Drawing.Size(345, 636);
+            this.tvwChannels.TabIndex = 10;
             // 
             // frmMain
             // 
@@ -407,7 +439,6 @@
         private System.Windows.Forms.Button btnDisconnect;
         private System.Windows.Forms.ListBox lbxClients;
         private System.Windows.Forms.TextBox tbxCommands;
-        private System.Windows.Forms.ListBox lbxChannels;
         private System.Windows.Forms.Button btnMove;
         private System.Windows.Forms.Button btnRefresh;
         private System.ComponentModel.BackgroundWorker bgw;
@@ -419,6 +450,7 @@
         private System.Windows.Forms.TabControl tclMain;
         private System.Windows.Forms.TabPage tbpLists;
         private System.Windows.Forms.TabPage tbpConsole;
+        private System.Windows.Forms.TreeView tvwChannels;
     }
 }
 

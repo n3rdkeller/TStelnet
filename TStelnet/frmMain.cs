@@ -106,10 +106,10 @@ namespace TStelnet
                 composedstring = string.Empty;
                 
                 //manual carriage returns for lists to be displayed in a niiiiiice way
-                if (lastcommand == "clientlist" || lastcommand == "channellist")
-                {
-                    data = data.Replace("|", tsnewline);
-                }
+                if (lastcommand == "clientlist" || lastcommand == "channellist") data = data.Replace("|", tsnewline);                
+                data = data.Replace ("\\s", " ");
+                data = data.Replace("???", "™");
+
                 // useless as fuck: (aber schön)
                 //switch (lastcommand)
                 //{
@@ -129,14 +129,8 @@ namespace TStelnet
                 /*Here we split data into strings if there is a carriage return*/
                 string[] decomposeddata = new string[32767];
                 decomposeddata = data.Split(new string[] { tsnewline }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (string dataline in decomposeddata)
-                {
-                    addtolog(dataline);
-                }
-                if (lastcommand == "clientlist" && data != "error id=0 msg=ok\n\r")
-                {
-                    cllist = decomposeddata;
-                }
+                foreach (string dataline in decomposeddata) addtolog(dataline);
+                if (lastcommand == "clientlist" && data != "error id=0 msg=ok\n\r") cllist = decomposeddata;
                 if (lastcommand == "channellist") chlist = decomposeddata;
             }
         }
@@ -177,45 +171,25 @@ namespace TStelnet
 
         private void tbxCommands_KeyDown(object sender, KeyEventArgs e)
         {
-
-
             if (e.KeyCode == Keys.Up)
             {
                 int bugfixvariable;
-                if (lastcommandscounter == -1)
-                {
-                    bugfixvariable = 0;
-                }
-                else
-                {
-                    bugfixvariable = lastcommandscounter;
-                }
+                if (lastcommandscounter == -1) bugfixvariable = 0;
+                    else bugfixvariable = lastcommandscounter;
+                
                 if (lastcommands[bugfixvariable] != null)
                 {
-                    if (lastcommandscounter == ArrayLength(lastcommands) - 1)
-                    {
-                        lastcommandscounter = 0;
-                    }
-                    else
-                    {
-                        lastcommandscounter++;
-                    }
+                    if (lastcommandscounter == ArrayLength(lastcommands) - 1) lastcommandscounter = 0;
+                        else lastcommandscounter++;
                     tbxCommands.Text = lastcommands[lastcommandscounter];
                 }
                 e.Handled = true;
             }
             else if (e.KeyCode == Keys.Down)
             {
-                if (lastcommandscounter == -1 || lastcommandscounter == 0)
-                {
-                    lastcommandscounter = ArrayLength(lastcommands) - 1;
-                    tbxCommands.Text = lastcommands[lastcommandscounter];
-                }
-                else
-                {
-                    lastcommandscounter--;
-                    tbxCommands.Text = lastcommands[lastcommandscounter];
-                }
+                if (lastcommandscounter == -1 || lastcommandscounter == 0) lastcommandscounter = ArrayLength(lastcommands) - 1;
+                    else lastcommandscounter--;
+                tbxCommands.Text = lastcommands[lastcommandscounter];
                 e.Handled = true;
             }
         }
@@ -224,42 +198,53 @@ namespace TStelnet
         {
 
             sendCommand("clientlist");
+            sendCommand("channellist");
             //System.Threading.Thread.Sleep(2000);
-            if (cllist[0] == null)
-            {
-                return;
-            }
+            if (cllist[0] == null) return;
             lbxClients.Items.Clear();
-            string[] names = getClients(cllist);
-            for (int i = 0; i < names.Length; i++)
-            {
-                lbxClients.Items.Add(names[i]);
-            }
+            string[] names = getClOrCh(cllist,0);
+            for (int i = 0; i < names.Length; i++) lbxClients.Items.Add(names[i]);
         }
 
-        private string[]getClients(string[] rawlist)
+     
+        #region supporting functions
+
+        private string[] getClOrCh(string[] rawlist, byte ClOrCh)
         {
-            for (int i = 0; i < rawlist.Length; i++)
+            string begin; string end;
+            if (ClOrCh == 0)
             {
-                rawlist[i] = rawlist[i].Substring(rawlist[i].IndexOf("client_nickname=") + ("client_nickname=").Length,
-                    (rawlist[i].LastIndexOf("client_type=") -1) - (rawlist[i].IndexOf("client_nickname=") + ("client_nickname=").Length));
+                begin = "client_nickname="; end = "client_type=";
             }
+            else
+            {
+                begin = "channel_name="; end = "total_clients=";
+            }
+            for (int i = 0; i < rawlist.Length; i++)
+                rawlist[i] = rawlist[i].Substring(rawlist[i].IndexOf(begin) + (begin).Length,
+                    (rawlist[i].LastIndexOf(end) - 1) - (rawlist[i].IndexOf(begin) + (begin).Length));
             return rawlist;
         }
-        
-        private int[] getClientIDs(string[] rawlist)
+
+        private int[] getClOrChIDs(string[] rawlist, byte ClOrCh)
         {
+            string begin; string end;
+            if (ClOrCh == 0)
+            {
+                begin = "clid="; end = "cid=";
+            }
+            else
+            {
+                begin = "cid="; end = "pid=";
+            }
             int[] ids = new int[rawlist.Length];
             for (int i = 0; i < rawlist.Length; i++)
-            {
-                ids[i] = Convert.ToInt32( "0"/*rawlist[i].Substring(rawlist[i].LastIndexOf("clid="),
-                      rawlist[i].Length - rawlist[i].LastIndexOf("cid=")-1)*/);
-            }
+                ids[i] = Convert.ToInt32(rawlist[i].Substring(rawlist[i].IndexOf(begin) + (begin).Length,
+                    (rawlist[i].LastIndexOf(end) - 1) - (rawlist[i].IndexOf(begin) + (begin).Length)));
             return ids;
         }
 
-
-        #region supporting functions
+    
 
         private void addtolog(object what)
         {
@@ -270,10 +255,7 @@ namespace TStelnet
             dtSecond = withzero(currentDate.Second);
 
 
-            if (this.InvokeRequired)
-            {
-                this.Invoke(new Action<object>(this.addtolog), what);
-            }
+            if (this.InvokeRequired) this.Invoke(new Action<object>(this.addtolog), what);
             else
             {
                 tbxLog.Text += "[" + dtHour + ":" + dtMinute + ":" + dtSecond + "] ";
@@ -304,7 +286,7 @@ namespace TStelnet
                 btnDisconnect.Enabled = true;
                 btnMove.Enabled = true;
                 btnRefresh.Enabled = true;
-                lbxChannels.Enabled = true;
+                tvwChannels.Enabled = true;
                 lbxClients.Enabled = true;
                 tbxCommands.Enabled = true;
                 tbxLogin.Enabled = true;
@@ -319,7 +301,7 @@ namespace TStelnet
                 btnDisconnect.Enabled = false;
                 btnMove.Enabled = false;
                 btnRefresh.Enabled = false;
-                lbxChannels.Enabled = false;
+                tvwChannels.Enabled = false;
                 lbxClients.Enabled = false;
                 tbxCommands.Enabled = false;
                 tbxLogin.Enabled = false;
