@@ -202,6 +202,7 @@ namespace TStelnet
                     }
                     tbxCommands.Text = lastcommands[lastcommandscounter];
                 }
+                e.Handled = true;
             }
             else if (e.KeyCode == Keys.Down)
             {
@@ -215,9 +216,8 @@ namespace TStelnet
                     lastcommandscounter--;
                     tbxCommands.Text = lastcommands[lastcommandscounter];
                 }
+                e.Handled = true;
             }
-
-            e.Handled = true;
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
