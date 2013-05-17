@@ -29,42 +29,29 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Knoten1");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Knoten2");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Knoten3");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Knoten0", new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2,
-            treeNode3});
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Knoten5");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Knoten6");
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Knoten7");
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Knoten4", new System.Windows.Forms.TreeNode[] {
-            treeNode5,
-            treeNode6,
-            treeNode7});
             this.btnConnect = new System.Windows.Forms.Button();
             this.tbxLog = new System.Windows.Forms.TextBox();
             this.btnDisconnect = new System.Windows.Forms.Button();
             this.lbxClients = new System.Windows.Forms.ListBox();
             this.tbxCommands = new System.Windows.Forms.TextBox();
             this.btnMove = new System.Windows.Forms.Button();
-            this.btnRefresh = new System.Windows.Forms.Button();
+            this.btnRefreshClients = new System.Windows.Forms.Button();
             this.btnLogin = new System.Windows.Forms.Button();
             this.btnHelp = new System.Windows.Forms.Button();
             this.btnSend = new System.Windows.Forms.Button();
             this.tclMain = new System.Windows.Forms.TabControl();
             this.tbpConsole = new System.Windows.Forms.TabPage();
-            this.tbpLists = new System.Windows.Forms.TabPage();
-            this.tvwChannels = new System.Windows.Forms.TreeView();
             this.nudSID = new System.Windows.Forms.NumericUpDown();
             this.tbxNick = new System.Windows.Forms.TextBox();
             this.tbxLogin = new System.Windows.Forms.TextBox();
             this.tbxIP = new System.Windows.Forms.TextBox();
+            this.tbpLists = new System.Windows.Forms.TabPage();
+            this.tvwChannels = new System.Windows.Forms.TreeView();
+            this.btnRefreshChannels = new System.Windows.Forms.Button();
             this.tclMain.SuspendLayout();
             this.tbpConsole.SuspendLayout();
-            this.tbpLists.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSID)).BeginInit();
+            this.tbpLists.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnConnect
@@ -106,7 +93,7 @@
             this.lbxClients.Location = new System.Drawing.Point(351, 5);
             this.lbxClients.Name = "lbxClients";
             this.lbxClients.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lbxClients.Size = new System.Drawing.Size(220, 316);
+            this.lbxClients.Size = new System.Drawing.Size(190, 316);
             this.lbxClients.TabIndex = 5;
             // 
             // tbxCommands
@@ -257,28 +244,29 @@
             // 
             this.btnMove.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMove.Image = ((System.Drawing.Image)(resources.GetObject("btnMove.Image")));
-            this.btnMove.Location = new System.Drawing.Point(400, 327);
+            this.btnMove.Location = new System.Drawing.Point(351, 327);
             this.btnMove.Name = "btnMove";
-            this.btnMove.Size = new System.Drawing.Size(118, 40);
+            this.btnMove.Size = new System.Drawing.Size(190, 40);
             this.btnMove.TabIndex = 8;
             this.btnMove.Text = "Move";
             this.btnMove.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnMove.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnMove.UseVisualStyleBackColor = true;
             // 
-            // btnRefresh
+            // btnRefreshClients
             // 
-            this.btnRefresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefresh.Image = ((System.Drawing.Image)(resources.GetObject("btnRefresh.Image")));
-            this.btnRefresh.Location = new System.Drawing.Point(400, 373);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(118, 40);
-            this.btnRefresh.TabIndex = 9;
-            this.btnRefresh.Text = "Refresh";
-            this.btnRefresh.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnRefresh.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnRefresh.UseVisualStyleBackColor = true;
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            this.btnRefreshClients.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRefreshClients.Image = ((System.Drawing.Image)(resources.GetObject("btnRefreshClients.Image")));
+            this.btnRefreshClients.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRefreshClients.Location = new System.Drawing.Point(351, 373);
+            this.btnRefreshClients.Name = "btnRefreshClients";
+            this.btnRefreshClients.Size = new System.Drawing.Size(190, 40);
+            this.btnRefreshClients.TabIndex = 9;
+            this.btnRefreshClients.Text = "Refresh Clients";
+            this.btnRefreshClients.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRefreshClients.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnRefreshClients.UseVisualStyleBackColor = true;
+            this.btnRefreshClients.Click += new System.EventHandler(this.btnRefreshClients_Click);
             // 
             // btnLogin
             // 
@@ -350,46 +338,6 @@
             this.tbpConsole.Text = "Console";
             this.tbpConsole.UseVisualStyleBackColor = true;
             // 
-            // tbpLists
-            // 
-            this.tbpLists.Controls.Add(this.tvwChannels);
-            this.tbpLists.Controls.Add(this.lbxClients);
-            this.tbpLists.Controls.Add(this.btnRefresh);
-            this.tbpLists.Controls.Add(this.btnMove);
-            this.tbpLists.Location = new System.Drawing.Point(4, 22);
-            this.tbpLists.Name = "tbpLists";
-            this.tbpLists.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpLists.Size = new System.Drawing.Size(839, 636);
-            this.tbpLists.TabIndex = 1;
-            this.tbpLists.Text = "Lists";
-            this.tbpLists.UseVisualStyleBackColor = true;
-            // 
-            // tvwChannels
-            // 
-            this.tvwChannels.Location = new System.Drawing.Point(0, 0);
-            this.tvwChannels.Name = "tvwChannels";
-            treeNode1.Name = "Knoten1";
-            treeNode1.Text = "Knoten1";
-            treeNode2.Name = "Knoten2";
-            treeNode2.Text = "Knoten2";
-            treeNode3.Name = "Knoten3";
-            treeNode3.Text = "Knoten3";
-            treeNode4.Name = "Knoten0";
-            treeNode4.Text = "Knoten0";
-            treeNode5.Name = "Knoten5";
-            treeNode5.Text = "Knoten5";
-            treeNode6.Name = "Knoten6";
-            treeNode6.Text = "Knoten6";
-            treeNode7.Name = "Knoten7";
-            treeNode7.Text = "Knoten7";
-            treeNode8.Name = "Knoten4";
-            treeNode8.Text = "Knoten4";
-            this.tvwChannels.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode4,
-            treeNode8});
-            this.tvwChannels.Size = new System.Drawing.Size(345, 636);
-            this.tvwChannels.TabIndex = 10;
-            // 
             // nudSID
             // 
             this.nudSID.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::TStelnet.Properties.Settings.Default, "sid", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
@@ -426,6 +374,43 @@
             this.tbxIP.TabIndex = 1;
             this.tbxIP.Text = global::TStelnet.Properties.Settings.Default.adress;
             // 
+            // tbpLists
+            // 
+            this.tbpLists.Controls.Add(this.btnRefreshChannels);
+            this.tbpLists.Controls.Add(this.tvwChannels);
+            this.tbpLists.Controls.Add(this.lbxClients);
+            this.tbpLists.Controls.Add(this.btnRefreshClients);
+            this.tbpLists.Controls.Add(this.btnMove);
+            this.tbpLists.Location = new System.Drawing.Point(4, 22);
+            this.tbpLists.Name = "tbpLists";
+            this.tbpLists.Padding = new System.Windows.Forms.Padding(3);
+            this.tbpLists.Size = new System.Drawing.Size(839, 636);
+            this.tbpLists.TabIndex = 1;
+            this.tbpLists.Text = "Lists";
+            this.tbpLists.UseVisualStyleBackColor = true;
+            // 
+            // tvwChannels
+            // 
+            this.tvwChannels.Location = new System.Drawing.Point(0, 0);
+            this.tvwChannels.Name = "tvwChannels";
+            this.tvwChannels.Size = new System.Drawing.Size(345, 636);
+            this.tvwChannels.TabIndex = 10;
+            // 
+            // btnRefreshChannels
+            // 
+            this.btnRefreshChannels.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRefreshChannels.Image = ((System.Drawing.Image)(resources.GetObject("btnRefreshChannels.Image")));
+            this.btnRefreshChannels.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnRefreshChannels.Location = new System.Drawing.Point(351, 419);
+            this.btnRefreshChannels.Name = "btnRefreshChannels";
+            this.btnRefreshChannels.Size = new System.Drawing.Size(190, 40);
+            this.btnRefreshChannels.TabIndex = 11;
+            this.btnRefreshChannels.Text = "Refresh Channel";
+            this.btnRefreshChannels.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRefreshChannels.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnRefreshChannels.UseVisualStyleBackColor = true;
+            this.btnRefreshChannels.Click += new System.EventHandler(this.btnRefreshChannels_Click);
+            // 
             // frmMain
             // 
             this.AcceptButton = this.btnSend;
@@ -444,8 +429,8 @@
             this.tclMain.ResumeLayout(false);
             this.tbpConsole.ResumeLayout(false);
             this.tbpConsole.PerformLayout();
-            this.tbpLists.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.nudSID)).EndInit();
+            this.tbpLists.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -459,7 +444,7 @@
         private System.Windows.Forms.ListBox lbxClients;
         private System.Windows.Forms.TextBox tbxCommands;
         private System.Windows.Forms.Button btnMove;
-        private System.Windows.Forms.Button btnRefresh;
+        private System.Windows.Forms.Button btnRefreshClients;
         private System.Windows.Forms.TextBox tbxLogin;
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.Button btnHelp;
@@ -470,6 +455,7 @@
         private System.Windows.Forms.TreeView tvwChannels;
         private System.Windows.Forms.TextBox tbxNick;
         private System.Windows.Forms.NumericUpDown nudSID;
+        private System.Windows.Forms.Button btnRefreshChannels;
     }
 }
 

@@ -22,11 +22,12 @@ namespace TStelnet
         const string tsnewline = "\n\r";
         const string tbxnewline = "\r\n";
         const string space = "\\s";
-        string[] chlist = new string[32767];
-        string[] cllist = new string[32767];
-        int[] chidlist = new int[32767];
-        int[] chpidlist = new int[32767]; //ERKENNTNIS: PID STEHT FÜR PARENT-ID! HA!
-        int[] clidlist = new int[32767];
+        const string okmsg = "error id=0 msg=ok\n\r";
+        string[] chlist = new string[32767]; //channelrawlist
+        string[] cllist = new string[32767]; //clientrawlist
+        int[] chidlist = new int[32767]; //channelidlist
+        int[] chpidlist = new int[32767]; //channelparentidlist
+        int[] clidlist = new int[32767]; //clientidlist
         #endregion
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -102,20 +103,28 @@ namespace TStelnet
             }
             else
             {
-                data = composedstring + data;
-                composedstring = string.Empty;
-                
-                //manual carriage returns for lists to be displayed in a niiiiiice way
-                if (lastcommand == "clientlist" || lastcommand == "channellist") data = data.Replace("|", tsnewline);                
-                data = data.Replace (space, " ");
-                data = data.Replace("???", "™");
-                
-                /*Here we split data into strings if there is a carriage return*/
-                string[] decomposeddata = new string[32767];
-                decomposeddata = data.Split(new string[] { tsnewline }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (string dataline in decomposeddata) addtolog(dataline);
-                if (lastcommand == "clientlist" && data != "error id=0 msg=ok\n\r") cllist = decomposeddata;
-                if (lastcommand == "channellist") chlist = decomposeddata;
+                if (true)
+                {
+                    
+                }
+                    data = composedstring + data;
+                    composedstring = string.Empty;
+
+                    //manual carriage returns for lists to be displayed in a niiiiiice way
+                    if (lastcommand == "clientlist" || lastcommand == "channellist") data = data.Replace("|", tsnewline);
+                    data = data.Replace(space, " ");
+                    data = data.Replace("???", "™");
+
+                    /*Here we split data into strings if there is a carriage return*/
+                    string[] decomposeddata = new string[32767];
+                    decomposeddata = data.Split(new string[] { tsnewline }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < decomposeddata.Length; i++)
+                    {
+                        addtolog(decomposeddata[i]);
+                        if (decomposeddata[i] == okmsg) decomposeddata[i] = null;
+                    }
+                    if (lastcommand == "clientlist") cllist = decomposeddata;
+                    if (lastcommand == "channellist") chlist = decomposeddata;
             }
         }
 
@@ -180,19 +189,54 @@ namespace TStelnet
             }
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private void btnRefreshClients_Click(object sender, EventArgs e)
         {
 
-            sendCommand("clientlist");
-            sendCommand("channellist");
-            //System.Threading.Thread.Sleep(2000);
-            if (cllist[0] == null) return;
-            lbxClients.Items.Clear();
-            string[] names = getClOrCh(cllist,0);
-            for (int i = 0; i < names.Length; i++) lbxClients.Items.Add(names[i]);
+            #region clientlist
+            //sendCommand("clientlist");
+            //if (cllist[0] != null || chlist[0] != okmsg)
+            //{
+            //    lbxClients.Items.Clear();
+            //    string[] clnames = getClOrCh(cllist, 0);
+            //    clidlist = getClOrChIDs(cllist, 0);
+            //    for (int i = 0; i < clnames.Length; i++) lbxClients.Items.Add(clnames[i]);
+            //}
+            #endregion
         }
 
-     
+        private void btnRefreshChannels_Click(object sender, EventArgs e)
+        {
+            #region channellist
+            sendCommand("channellist");
+            if (chlist[0] != null && chlist[0] != okmsg.Replace(tsnewline,string.Empty)) //problem! :'(
+            {
+                tvwChannels.Nodes.Clear(); //needs maybe update
+                chidlist = getClOrChIDs(chlist, 1);
+                chpidlist = getClOrChIDs(chlist, 2);
+                string[] chnames = getClOrCh(chlist, 1);
+                int nodecounter = 0;
+                for (int i = 0; i < chnames.Length; i++) //loop for filling treeview
+                {
+                    if (chpidlist[i] == 0)
+                    {
+                        tvwChannels.Nodes.Add(chnames[i]);
+                        nodecounter++;
+                    }
+                    else
+                    {
+                        for (int k = 0; k < chnames.Length; k++)
+                        {
+                            if (chpidlist[k] == chidlist[i])
+                            {
+                                tvwChannels.Nodes[nodecounter - 1].Nodes.Add(chnames[i]);
+                            }
+                        }
+                    }
+                }
+            }
+            #endregion
+        }
+
         #region supporting functions
 
         private string[] getClOrCh(string[] rawlist, byte ClOrCh)
@@ -212,16 +256,20 @@ namespace TStelnet
             return rawlist;
         }
 
-        private int[] getClOrChIDs(string[] rawlist, byte ClOrCh)
+        private int[] getClOrChIDs(string[] rawlist, int ClOrCh)
         {
-            string begin; string end;
-            if (ClOrCh == 0)
+            string begin = ""; string end = "";
+            if (ClOrCh == 0) //ClientIDs
             {
                 begin = "clid="; end = "cid=";
             }
-            else
+            else if (ClOrCh == 1) //ChannelIDs
             {
                 begin = "cid="; end = "pid=";
+            }
+            else if (ClOrCh == 2) //Channel-PIDs
+            {
+                begin = "pid="; end = "channel_order=";
             }
             int[] ids = new int[rawlist.Length];
             for (int i = 0; i < rawlist.Length; i++)
@@ -269,7 +317,7 @@ namespace TStelnet
                 btnConnect.Enabled = false;
                 btnDisconnect.Enabled = true;
                 btnMove.Enabled = true;
-                btnRefresh.Enabled = true;
+                btnRefreshClients.Enabled = true;
                 tvwChannels.Enabled = true;
                 lbxClients.Enabled = true;
                 tbxCommands.Enabled = true;
@@ -286,7 +334,7 @@ namespace TStelnet
                 btnConnect.Enabled = true;
                 btnDisconnect.Enabled = false;
                 btnMove.Enabled = false;
-                btnRefresh.Enabled = false;
+                btnRefreshClients.Enabled = false;
                 tvwChannels.Enabled = false;
                 lbxClients.Enabled = false;
                 tbxCommands.Enabled = false;
@@ -340,6 +388,8 @@ namespace TStelnet
         }
 
         #endregion
+
+
 
     }
 }
