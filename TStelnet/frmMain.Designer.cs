@@ -46,8 +46,8 @@
             this.tbxLogin = new System.Windows.Forms.TextBox();
             this.tbxIP = new System.Windows.Forms.TextBox();
             this.tbpLists = new System.Windows.Forms.TabPage();
-            this.tvwChannels = new System.Windows.Forms.TreeView();
             this.btnRefreshChannels = new System.Windows.Forms.Button();
+            this.tvwChannels = new System.Windows.Forms.TreeView();
             this.tclMain.SuspendLayout();
             this.tbpConsole.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSID)).BeginInit();
@@ -90,7 +90,7 @@
             // lbxClients
             // 
             this.lbxClients.FormattingEnabled = true;
-            this.lbxClients.Location = new System.Drawing.Point(351, 5);
+            this.lbxClients.Location = new System.Drawing.Point(351, 0);
             this.lbxClients.Name = "lbxClients";
             this.lbxClients.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.lbxClients.Size = new System.Drawing.Size(190, 316);
@@ -244,7 +244,7 @@
             // 
             this.btnMove.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMove.Image = ((System.Drawing.Image)(resources.GetObject("btnMove.Image")));
-            this.btnMove.Location = new System.Drawing.Point(351, 327);
+            this.btnMove.Location = new System.Drawing.Point(351, 322);
             this.btnMove.Name = "btnMove";
             this.btnMove.Size = new System.Drawing.Size(190, 40);
             this.btnMove.TabIndex = 8;
@@ -258,7 +258,7 @@
             this.btnRefreshClients.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRefreshClients.Image = ((System.Drawing.Image)(resources.GetObject("btnRefreshClients.Image")));
             this.btnRefreshClients.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRefreshClients.Location = new System.Drawing.Point(351, 373);
+            this.btnRefreshClients.Location = new System.Drawing.Point(351, 368);
             this.btnRefreshClients.Name = "btnRefreshClients";
             this.btnRefreshClients.Size = new System.Drawing.Size(190, 40);
             this.btnRefreshClients.TabIndex = 9;
@@ -389,19 +389,12 @@
             this.tbpLists.Text = "Lists";
             this.tbpLists.UseVisualStyleBackColor = true;
             // 
-            // tvwChannels
-            // 
-            this.tvwChannels.Location = new System.Drawing.Point(0, 0);
-            this.tvwChannels.Name = "tvwChannels";
-            this.tvwChannels.Size = new System.Drawing.Size(345, 636);
-            this.tvwChannels.TabIndex = 10;
-            // 
             // btnRefreshChannels
             // 
             this.btnRefreshChannels.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRefreshChannels.Image = ((System.Drawing.Image)(resources.GetObject("btnRefreshChannels.Image")));
             this.btnRefreshChannels.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnRefreshChannels.Location = new System.Drawing.Point(351, 419);
+            this.btnRefreshChannels.Location = new System.Drawing.Point(351, 414);
             this.btnRefreshChannels.Name = "btnRefreshChannels";
             this.btnRefreshChannels.Size = new System.Drawing.Size(190, 40);
             this.btnRefreshChannels.TabIndex = 11;
@@ -410,6 +403,13 @@
             this.btnRefreshChannels.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnRefreshChannels.UseVisualStyleBackColor = true;
             this.btnRefreshChannels.Click += new System.EventHandler(this.btnRefreshChannels_Click);
+            // 
+            // tvwChannels
+            // 
+            this.tvwChannels.Location = new System.Drawing.Point(0, 0);
+            this.tvwChannels.Name = "tvwChannels";
+            this.tvwChannels.Size = new System.Drawing.Size(345, 636);
+            this.tvwChannels.TabIndex = 10;
             // 
             // frmMain
             // 
