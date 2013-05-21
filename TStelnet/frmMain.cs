@@ -23,6 +23,7 @@ namespace TStelnet
         const string tbxnewline = "\r\n";
         const string space = "\\s";
         const string okmsg = "error id=0 msg=ok\n\r";
+        const string okmsgwonl = "error id=0 msg=ok";
         string[] chlist = new string[32767]; //channelrawlist
         string[] cllist = new string[32767]; //clientrawlist
         int[] chidlist = new int[32767]; //channelidlist
@@ -95,7 +96,7 @@ namespace TStelnet
 
             /* teamspeak does something strange at this point
              * it splits data in the middle of nowhere, so we 
-             * need to compose it again before adding it to log.
+             * need to compose it again before dealing with it.
              */
             if (!data.EndsWith(tsnewline))
             {
@@ -193,14 +194,14 @@ namespace TStelnet
         {
 
             #region clientlist
-            //sendCommand("clientlist");
-            //if (cllist[0] != null || chlist[0] != okmsg)
-            //{
-            //    lbxClients.Items.Clear();
-            //    string[] clnames = getClOrCh(cllist, 0);
-            //    clidlist = getClOrChIDs(cllist, 0);
-            //    for (int i = 0; i < clnames.Length; i++) lbxClients.Items.Add(clnames[i]);
-            //}
+            sendCommand("clientlist");
+            if (cllist[0] != null && cllist[0] != okmsgwonl)
+            {
+                lbxClients.Items.Clear();
+                string[] clnames = getClOrCh(cllist, 0);
+                clidlist = getClOrChIDs(cllist, 0);
+                for (int i = 0; i < clnames.Length; i++) lbxClients.Items.Add(clnames[i]);
+            }
             #endregion
         }
 
