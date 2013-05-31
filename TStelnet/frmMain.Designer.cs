@@ -311,6 +311,7 @@
             this.tclMain.Controls.Add(this.tbpConsole);
             this.tclMain.Controls.Add(this.tbpLists);
             this.tclMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tclMain.HotTrack = true;
             this.tclMain.Location = new System.Drawing.Point(0, 0);
             this.tclMain.Name = "tclMain";
             this.tclMain.SelectedIndex = 0;
@@ -416,8 +417,10 @@
             this.AcceptButton = this.btnSend;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ControlDark;
             this.ClientSize = new System.Drawing.Size(847, 662);
             this.Controls.Add(this.tclMain);
+            this.ForeColor = System.Drawing.Color.Black;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
@@ -425,6 +428,7 @@
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TStelnet - by r3t4rdun1c0rns";
+            this.TransparencyKey = System.Drawing.SystemColors.ControlDark;
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.tclMain.ResumeLayout(false);
             this.tbpConsole.ResumeLayout(false);

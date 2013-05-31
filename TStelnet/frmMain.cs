@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using TelnetSocketNamespace;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace TStelnet
 {
@@ -12,6 +13,35 @@ namespace TStelnet
             InitializeComponent();
         }
 
+        #region GlassedFrame
+
+        [DllImport("dwmapi.dll", PreserveSig = false)]
+        public static extern void DwmExtendFrameIntoClientArea(IntPtr hwnd, ref MARGINS margins);
+
+        [DllImport("dwmapi.dll", PreserveSig = false)]
+        public static extern bool DwmIsCompositionEnabled();
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MARGINS
+        {
+            public int Left;
+            public int Right;
+            public int Top;
+            public int Bottom;
+        }
+
+        private void SetGlass()
+        {
+            if (DwmIsCompositionEnabled())
+            {
+                MARGINS margins = new MARGINS();
+                margins.Top = -1; margins.Left = -1; margins.Bottom = -1; margins.Right = -1;
+                DwmExtendFrameIntoClientArea(this.Handle, ref margins);
+            }
+        }
+
+        #endregion
+        
         #region variables declaration
         TelnetSocket tc = new TelnetSocket();
         bool connectionestablished = false;
@@ -35,6 +65,7 @@ namespace TStelnet
         {
             connectedornot(0);
             tvwChannels.ExpandAll();
+            SetGlass();
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
