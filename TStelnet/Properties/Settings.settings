@@ -6,7 +6,7 @@
       <Value Profile="(Default)">91.121.193.155:10011</Value>
     </Setting>
     <Setting Name="login" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Johannes vQtWhuy0</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="nickname" Type="System.String" Scope="User">
       <Value Profile="(Default)">Admin</Value>
