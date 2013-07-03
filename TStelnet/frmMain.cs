@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using TelnetSocketNamespace;
 using System.Threading;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace TStelnet
 {
@@ -341,10 +342,18 @@ namespace TStelnet
             }
         }
 
+        private void DrawGlowingText()
+        {
+ 
+        }
+
+
         private void connectedornot(byte yorn)
         {
             if (yorn == 1)
             {
+                lblStatus.Text = "Connected to " + tbxIP.Text;
+                DrawGlowingText();
                 tbxIP.Enabled = false;
                 btnConnect.Enabled = false;
                 btnDisconnect.Enabled = true;
@@ -362,6 +371,8 @@ namespace TStelnet
             }
             else
             {
+                lblStatus.Text = "Disconnected";
+                DrawGlowingText();
                 tbxIP.Enabled = true;
                 btnConnect.Enabled = true;
                 btnDisconnect.Enabled = false;
@@ -420,6 +431,11 @@ namespace TStelnet
         }
 
         #endregion
+
+        private void frmMain_Paint(object sender, PaintEventArgs e)
+        {
+   
+        }
 
 
 

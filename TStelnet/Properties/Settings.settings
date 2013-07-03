@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="adress" Type="System.String" Scope="User">
-      <Value Profile="(Default)">91.121.193.155:10011</Value>
+      <Value Profile="(Default)">n3rdkeller.de:62333</Value>
     </Setting>
     <Setting Name="login" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

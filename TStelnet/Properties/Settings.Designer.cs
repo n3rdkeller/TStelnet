@@ -25,7 +25,7 @@ namespace TStelnet.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("91.121.193.155:10011")]
+        [global::System.Configuration.DefaultSettingValueAttribute("n3rdkeller.de:62333")]
         public string adress {
             get {
                 return ((string)(this["adress"]));

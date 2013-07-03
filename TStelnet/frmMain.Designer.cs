@@ -48,6 +48,7 @@
             this.tbpLists = new System.Windows.Forms.TabPage();
             this.btnRefreshChannels = new System.Windows.Forms.Button();
             this.tvwChannels = new System.Windows.Forms.TreeView();
+            this.lblStatus = new System.Windows.Forms.Label();
             this.tclMain.SuspendLayout();
             this.tbpConsole.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSID)).BeginInit();
@@ -73,7 +74,7 @@
             this.tbxLog.Name = "tbxLog";
             this.tbxLog.ReadOnly = true;
             this.tbxLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbxLog.Size = new System.Drawing.Size(833, 547);
+            this.tbxLog.Size = new System.Drawing.Size(833, 526);
             this.tbxLog.TabIndex = 3;
             // 
             // btnDisconnect
@@ -233,7 +234,7 @@
             this.tbxCommands.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.tbxCommands.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.tbxCommands.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
-            this.tbxCommands.Location = new System.Drawing.Point(8, 590);
+            this.tbxCommands.Location = new System.Drawing.Point(8, 569);
             this.tbxCommands.Name = "tbxCommands";
             this.tbxCommands.Size = new System.Drawing.Size(575, 29);
             this.tbxCommands.TabIndex = 6;
@@ -282,7 +283,7 @@
             // 
             this.btnHelp.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnHelp.Image = ((System.Drawing.Image)(resources.GetObject("btnHelp.Image")));
-            this.btnHelp.Location = new System.Drawing.Point(713, 585);
+            this.btnHelp.Location = new System.Drawing.Point(713, 564);
             this.btnHelp.Name = "btnHelp";
             this.btnHelp.Size = new System.Drawing.Size(118, 41);
             this.btnHelp.TabIndex = 12;
@@ -296,7 +297,7 @@
             // 
             this.btnSend.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
             this.btnSend.Image = ((System.Drawing.Image)(resources.GetObject("btnSend.Image")));
-            this.btnSend.Location = new System.Drawing.Point(589, 585);
+            this.btnSend.Location = new System.Drawing.Point(589, 564);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(118, 41);
             this.btnSend.TabIndex = 13;
@@ -310,12 +311,11 @@
             // 
             this.tclMain.Controls.Add(this.tbpConsole);
             this.tclMain.Controls.Add(this.tbpLists);
-            this.tclMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tclMain.HotTrack = true;
             this.tclMain.Location = new System.Drawing.Point(0, 0);
             this.tclMain.Name = "tclMain";
             this.tclMain.SelectedIndex = 0;
-            this.tclMain.Size = new System.Drawing.Size(847, 662);
+            this.tclMain.Size = new System.Drawing.Size(847, 637);
             this.tclMain.TabIndex = 14;
             // 
             // tbpConsole
@@ -334,7 +334,7 @@
             this.tbpConsole.Location = new System.Drawing.Point(4, 22);
             this.tbpConsole.Name = "tbpConsole";
             this.tbpConsole.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpConsole.Size = new System.Drawing.Size(839, 636);
+            this.tbpConsole.Size = new System.Drawing.Size(839, 611);
             this.tbpConsole.TabIndex = 0;
             this.tbpConsole.Text = "Console";
             this.tbpConsole.UseVisualStyleBackColor = true;
@@ -385,7 +385,7 @@
             this.tbpLists.Location = new System.Drawing.Point(4, 22);
             this.tbpLists.Name = "tbpLists";
             this.tbpLists.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpLists.Size = new System.Drawing.Size(839, 636);
+            this.tbpLists.Size = new System.Drawing.Size(839, 616);
             this.tbpLists.TabIndex = 1;
             this.tbpLists.Text = "Lists";
             this.tbpLists.UseVisualStyleBackColor = true;
@@ -412,13 +412,23 @@
             this.tvwChannels.Size = new System.Drawing.Size(345, 636);
             this.tvwChannels.TabIndex = 10;
             // 
+            // lblStatus
+            // 
+            this.lblStatus.AutoSize = true;
+            this.lblStatus.Location = new System.Drawing.Point(3, 646);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(47, 13);
+            this.lblStatus.TabIndex = 15;
+            this.lblStatus.Text = "lblStatus";
+            // 
             // frmMain
             // 
             this.AcceptButton = this.btnSend;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ClientSize = new System.Drawing.Size(847, 662);
+            this.BackColor = System.Drawing.Color.Snow;
+            this.ClientSize = new System.Drawing.Size(847, 665);
+            this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.tclMain);
             this.ForeColor = System.Drawing.Color.Black;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -427,15 +437,17 @@
             this.MaximizeBox = false;
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "TStelnet - by r3t4rdun1c0rns";
-            this.TransparencyKey = System.Drawing.SystemColors.ControlDark;
+            this.Text = "TStelnet - by n3rdkeller™";
+            this.TransparencyKey = System.Drawing.Color.Snow;
             this.Load += new System.EventHandler(this.frmMain_Load);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.frmMain_Paint);
             this.tclMain.ResumeLayout(false);
             this.tbpConsole.ResumeLayout(false);
             this.tbpConsole.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSID)).EndInit();
             this.tbpLists.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -460,6 +472,7 @@
         private System.Windows.Forms.TextBox tbxNick;
         private System.Windows.Forms.NumericUpDown nudSID;
         private System.Windows.Forms.Button btnRefreshChannels;
+        private System.Windows.Forms.Label lblStatus;
     }
 }
 
