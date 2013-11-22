@@ -385,7 +385,7 @@
             this.tbpLists.Location = new System.Drawing.Point(4, 22);
             this.tbpLists.Name = "tbpLists";
             this.tbpLists.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpLists.Size = new System.Drawing.Size(839, 616);
+            this.tbpLists.Size = new System.Drawing.Size(839, 611);
             this.tbpLists.TabIndex = 1;
             this.tbpLists.Text = "Lists";
             this.tbpLists.UseVisualStyleBackColor = true;
@@ -415,6 +415,7 @@
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
+            this.lblStatus.BackColor = System.Drawing.Color.Snow;
             this.lblStatus.Location = new System.Drawing.Point(3, 646);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(47, 13);

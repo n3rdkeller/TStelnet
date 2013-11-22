@@ -4,6 +4,7 @@ using TelnetSocketNamespace;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace TStelnet
 {
@@ -342,9 +343,21 @@ namespace TStelnet
             }
         }
 
-        private void DrawGlowingText()
+        private void Glow()
         {
- 
+            Graphics g = this.CreateGraphics();
+GraphicsPath blackfont = new GraphicsPath();
+SolidBrush brsh = new SolidBrush(Color.White);
+           
+
+blackfont.AddString("Hello Vista", 
+    new FontFamily("Tahoma", (int)FontStyle.Regular, 26, 
+    new Point(0, 0), StringFormat.GenericDefault);
+
+//SmoothingMode must be set, or text smoothing will not work
+
+g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality  ;   
+g.FillPath(brsh, blackfont);    //Fill the font with White brush
         }
 
 
@@ -353,7 +366,6 @@ namespace TStelnet
             if (yorn == 1)
             {
                 lblStatus.Text = "Connected to " + tbxIP.Text;
-                DrawGlowingText();
                 tbxIP.Enabled = false;
                 btnConnect.Enabled = false;
                 btnDisconnect.Enabled = true;
@@ -372,7 +384,6 @@ namespace TStelnet
             else
             {
                 lblStatus.Text = "Disconnected";
-                DrawGlowingText();
                 tbxIP.Enabled = true;
                 btnConnect.Enabled = true;
                 btnDisconnect.Enabled = false;
@@ -434,7 +445,7 @@ namespace TStelnet
 
         private void frmMain_Paint(object sender, PaintEventArgs e)
         {
-   
+            e.Graphics.DrawRectangle(new Pen(SystemBrushes.Control), new Rectangle(this.Location,this.Size));
         }
 
 
