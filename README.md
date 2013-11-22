@@ -9,7 +9,7 @@ First tab, the improved telnet console, is completely working and we're proud it
 
 So far, feel free to request pulls, we will of course take care of them.
 
-And if you're going to find some login credentials in the code: feel free to test them. They won't work. User your own ;)
+And if you're going to find some login credentials in the code: feel free to test them. They won't work. Use your own ;)
 
 
 ###Requirements
